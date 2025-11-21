@@ -23,10 +23,6 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v6
-      with:
-        fetch-depth: 0
-        #ref: ${{ github.head_ref || github.ref_name }} 
-        submodules: recursive
 
     - name: Install libsasl2-dev
       run: sudo apt install -y libsasl2-dev
@@ -42,7 +38,7 @@ jobs:
         log_level: info
         log_verbose: true
         namespace: mongodb.${{github.repository_owner}}
-        pr: false
+        pr: true
         scan_dependencies: true
         scan_path: ${{github.workspace}}
         tags: github_action
