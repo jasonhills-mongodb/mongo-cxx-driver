@@ -20,6 +20,8 @@ jobs:
   configure-and-scan:
     permissions:
       id-token: write # Required to request a json web token (JWT) for keyless authentication with Endor Labs
+      packages: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
@@ -35,9 +37,32 @@ jobs:
     - name: Scan with Endor Labs
       uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
       with:
+        additional_args: --languages=c
         namespace: ${{env.ENDOR_NAMESPACE}}
+        pr: false
         scan_dependencies: true
         tags: github_action
-        additional_args: --languages=c
       env:
         ENDOR_SCAN_EMBEDDINGS: true
+        ENDOR_SCAN_INCLUDE_PATH: 
+        ENDOR_SCAN_EXCLUDE_PATH: 
+    
+    # - name: Setup Endor Labs Endorctl
+    #   uses: endorlabs/github-action/setup@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
+    #   with:
+    #     namespace: ${{env.ENDOR_NAMESPACE}}
+    #     enable_github_action_token: true
+
+    # - name: Run Endorctl
+    #   env:
+    #     ENDOR_GITHUB_ACTION_TOKEN_ENABLE: true
+    #     ENDOR_SCAN_DEPENDENCIES: true
+    #     ENDOR_SCAN_EMBEDDINGS: true
+    #     ENDOR_SCAN_INCLUDE_PATH: 
+    #     ENDOR_SCAN_LANGUAGES: c
+    #     ENDOR_SCAN_SUMMARY_OUTPUT_TYPE: json
+    #     ENDOR_SCAN_TAGS: github_action
+    #   run: |
+    #     endorctl scan
+
+
