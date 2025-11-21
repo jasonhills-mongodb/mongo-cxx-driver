@@ -46,7 +46,7 @@ jobs:
         tags: github_action
       env:
         ENDOR_SCAN_EMBEDDINGS: true
-        INCLUDE_PATH: "./build/_deps/**" # Use env to properly escape glob pattern
+        INCLUDE_PATH: "**/_deps/**" # Use env to properly escape glob pattern
 
     # - uses: actions/setup-python@v6
     #   with:
