@@ -27,8 +27,8 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Install libsasl2-dev
-      run: sudo apt install -y libsasl2-dev
+    - name: Install dev libs
+      run: sudo apt install -y libsasl2-dev libsnappy-dev libssl-dev libmongocrypt-dev
 
     - name: Configure CMake and fetch dependency source
       run: cmake .. -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_STANDARD=${{env.CXX_STANDARD}}
@@ -46,7 +46,7 @@ jobs:
         tags: github_action
       env:
         ENDOR_SCAN_EMBEDDINGS: true
-        INCLUDE_PATH: "build/_deps/**" # Use env to properly escape glob pattern
+        INCLUDE_PATH: "./build/_deps/**" # Use env to properly escape glob pattern
 
     # - uses: actions/setup-python@v6
     #   with:
