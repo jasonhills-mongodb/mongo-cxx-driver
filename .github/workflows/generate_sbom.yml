@@ -2,10 +2,11 @@ name: Generate SBOM
 
 on:
   workflow_dispatch:
-  #push:
-  #  branches:
-  #    - 'master'
-  #    - 'releases/**'
+  push:
+    branches:
+      - 'master'
+      - 'releases/**'
+      - 'CXX**'
 
 env:
   BUILD_TYPE: Release
