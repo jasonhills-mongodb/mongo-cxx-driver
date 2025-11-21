@@ -18,11 +18,13 @@ jobs:
     permissions:
       id-token: write # Required to request a json web token (JWT) for keyless authentication with Endor Labs
       #packages: write
-      #contents: read
+      contents: read
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v6
+      with:
+        submodules: recursive
 
     - name: Install libsasl2-dev
       run: sudo apt install -y libsasl2-dev
