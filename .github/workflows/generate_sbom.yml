@@ -43,7 +43,6 @@ jobs:
         namespace: ${{env.ENDOR_NAMESPACE}}
         pr: false
         scan_dependencies: true
-        scan_path: build/_deps
         tags: github_action
       env:
         ENDOR_SCAN_EMBEDDINGS: true
