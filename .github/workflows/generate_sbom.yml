@@ -22,7 +22,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+        ref: ${{ github.head_ref || github.ref_name }} 
+        submodules: recursive
 
     - name: Install libsasl2-dev
       run: sudo apt install -y libsasl2-dev
