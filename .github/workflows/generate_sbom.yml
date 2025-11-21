@@ -1,0 +1,44 @@
+name: Generate SBOM
+
+on:
+  workflow_dispatch:
+  #push:
+  #  branches:
+  #    - 'master'
+  #    - 'releases/**'
+
+env:
+  BUILD_TYPE: Release
+  BUILD: ${{github.workspace}}/build
+  CXX_STANDARD: 17
+  SOURCE: ${{github.workspace}}
+  VERSION: ${{github.ref_name}}
+  ENDOR_NAMESPACE: mongodb.${{github.repository_owner}}
+
+jobs:
+  configure-and-scan:
+    permissions:
+      id-token: write # Required to request a json web token (JWT) for keyless authentication with Endor Labs
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Install libsasl2-dev
+      run: sudo apt install -y libsasl2-dev
+
+    - name: Configure CMake and fetch dependency source
+      run: cmake .. -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_STANDARD=${{env.CXX_STANDARD}}
+      working-directory: ${{env.BUILD}}
+
+    - name: Scan with Endor Labs
+      uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
+      with:
+        namespace: ${{env.ENDOR_NAMESPACE}}
+        pr: false
+        scan_dependencies: true
+        scan_github_actions: true
+        tags: github_action
+        additional_args: --languages=c
+      env:
+        ENDOR_SCAN_EMBEDDINGS: true
