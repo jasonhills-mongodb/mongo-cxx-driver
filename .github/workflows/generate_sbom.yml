@@ -25,7 +25,7 @@ jobs:
       uses: actions/checkout@v6
       with:
         fetch-depth: 0
-        ref: ${{ github.head_ref || github.ref_name }} 
+        #ref: ${{ github.head_ref || github.ref_name }} 
         submodules: recursive
 
     - name: Install libsasl2-dev
