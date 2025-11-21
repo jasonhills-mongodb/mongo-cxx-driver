@@ -37,16 +37,16 @@ jobs:
     - name: Install endorctl and Scan with Endor Labs
       uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
       with:
-        additional_args: "--languages=c --include-path=\"${{env.INCLUDE_PATH}}\""
+        additional_args: --languages=c
         log_level: info
         log_verbose: false
         namespace: ${{env.ENDOR_NAMESPACE}}
         pr: false
         scan_dependencies: true
+        scan_path: build/_deps
         tags: github_action
       env:
         ENDOR_SCAN_EMBEDDINGS: true
-        INCLUDE_PATH: "**/_deps/**" # Use env to properly escape glob pattern
 
     # - uses: actions/setup-python@v6
     #   with:
