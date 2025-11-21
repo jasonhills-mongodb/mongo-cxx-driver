@@ -37,7 +37,7 @@ jobs:
     - name: Install endorctl and Scan with Endor Labs
       uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
       with:
-        additional_args: "--languages=c --include-path=\"$INCLUDE_PATH\""
+        additional_args: "--languages=c --include-path=\"${{env.INCLUDE_PATH}}\""
         log_level: info
         log_verbose: false
         namespace: ${{env.ENDOR_NAMESPACE}}
