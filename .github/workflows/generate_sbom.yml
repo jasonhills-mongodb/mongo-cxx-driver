@@ -36,9 +36,7 @@ jobs:
       uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
       with:
         namespace: ${{env.ENDOR_NAMESPACE}}
-        pr: false
         scan_dependencies: true
-        scan_github_actions: true
         tags: github_action
         additional_args: --languages=c
       env:
