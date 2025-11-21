@@ -12,16 +12,14 @@ env:
   BUILD_TYPE: Release
   BUILD: ${{github.workspace}}/build
   CXX_STANDARD: 17
-  SOURCE: ${{github.workspace}}
-  VERSION: ${{github.ref_name}}
   ENDOR_NAMESPACE: mongodb.${{github.repository_owner}}
 
 jobs:
   configure-and-scan:
     permissions:
       id-token: write # Required to request a json web token (JWT) for keyless authentication with Endor Labs
-      packages: write
-      contents: read
+      #packages: write
+      #contents: read
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
@@ -37,7 +35,7 @@ jobs:
     - name: Scan with Endor Labs
       uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
       with:
-        additional_args: --languages=c --include-path="build/_deps/**"
+        additional_args: --languages=c --include-path="build/_deps/**" --exclude-path="src/**"
         namespace: ${{env.ENDOR_NAMESPACE}}
         pr: false
         scan_dependencies: true
