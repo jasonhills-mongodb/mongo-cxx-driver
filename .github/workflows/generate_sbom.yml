@@ -65,7 +65,7 @@ jobs:
     - name: Install endorctl and Scan with Endor Labs
       uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
       with:
-        additional_args: "--languages=c --include-path=\"build/_deps/**\""
+        additional_args: "--languages=c --include-path=\"build/**\""
         log_level: info
         log_verbose: false
         namespace: mongodb.${{github.repository_owner}}
