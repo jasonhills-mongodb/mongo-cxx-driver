@@ -81,6 +81,8 @@ jobs:
         enable_github_action_token: true
 
     - name: Run Endorctl
+      env:
+        ENDOR_SCAN_USE_SCAN_PROFILE: true
       run: endorctl scan
 
     # - uses: actions/setup-python@v6
