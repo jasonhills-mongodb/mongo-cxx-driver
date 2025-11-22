@@ -40,7 +40,7 @@ jobs:
 
     - name: Create and populate .endorctl/scanprofile.yaml file
       run: |
-        md .endorctl
+        mkdir .endorctl
         cat <<EOF > .endorctl/scanprofile.yaml
         kind: AutomatedScanParameters
         spec:
