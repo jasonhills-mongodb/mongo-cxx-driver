@@ -55,15 +55,15 @@ jobs:
     #     echo "cat .endorctl/scanprofile.yaml"
     #     cat .endorctl/scanprofile.yaml
 
-    - name: Rename build folder # Endor Labs will automatically try to exclude "build"
-      run: |
-        mv build third_party
-        git add third_party
+    # - name: Rename build folder # Endor Labs will automatically try to exclude "build"
+    #   run: |
+    #     mv build third_party
+    #     git add third_party
 
     - name: Install endorctl and Scan with Endor Labs
       uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
       with:
-        additional_args: "--languages=c --include-path=third_party/**"
+        additional_args: "--languages=c"
         log_level: info
         log_verbose: false
         namespace: mongodb.${{github.repository_owner}}
