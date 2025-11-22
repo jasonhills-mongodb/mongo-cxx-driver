@@ -32,39 +32,39 @@ jobs:
       working-directory: ${{env.BUILD}}
       run: cmake .. -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_STANDARD=${{env.CXX_STANDARD}} -DENABLE_TESTS=ON
 
-    - name: Create and populate .endorctl/scanprofile.yaml file
-      run: |
-        mkdir .endorctl
-        cat <<EOF > .endorctl/scanprofile.yaml
-        kind: AutomatedScanParameters
-        spec:
-          automated_scan_parameters:
-            additional_environment_variables:
-              - ENDOR_SCAN_EMBEDDINGS=true
-            included_paths:
-              - build/_deps/**
-            #excluded_paths:
-            #  - benchmark/**
-            #  - src/**
-            languages:
-              - c
-            scan_dependencies: true
-            tags: github_action
-        EOF
-        git add .endorctl/scanprofile.yaml
-        echo "cat .endorctl/scanprofile.yaml"
-        cat .endorctl/scanprofile.yaml
-
-    # - name: Remove unneeded source files
-    #   working-directory: ${{github.workspace}}
+    # - name: Create and populate .endorctl/scanprofile.yaml file
     #   run: |
-    #     git rm -r -- benchmark cmake data docs etc examples extras generate_uninstall src
-    #     ls -al
+    #     mkdir .endorctl
+    #     cat <<EOF > .endorctl/scanprofile.yaml
+    #     kind: AutomatedScanParameters
+    #     spec:
+    #       automated_scan_parameters:
+    #         additional_environment_variables:
+    #           - ENDOR_SCAN_EMBEDDINGS=true
+    #         included_paths:
+    #           - build/_deps/**
+    #         #excluded_paths:
+    #         #  - benchmark/**
+    #         #  - src/**
+    #         languages:
+    #           - c
+    #         scan_dependencies: true
+    #         tags: github_action
+    #     EOF
+    #     git add .endorctl/scanprofile.yaml
+    #     echo "cat .endorctl/scanprofile.yaml"
+    #     cat .endorctl/scanprofile.yaml
+
+    - name: Remove unneeded source files
+      working-directory: ${{github.workspace}}
+      run: |
+        git rm -r -- benchmark cmake data docs etc examples extras generate_uninstall src
+        ls -al
 
     - name: Install endorctl and Scan with Endor Labs
       uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
       with:
-        #additional_args: "--languages=c --exclude-path=\"benchmark/**\" --exclude-path=\"src/**\" --exclude-path=\"build/CMakeFiles/**\""
+        additional_args: "--languages=c"
         log_level: info
         log_verbose: false
         namespace: mongodb.${{github.repository_owner}}
@@ -73,7 +73,6 @@ jobs:
         tags: github_action
       env:
         ENDOR_SCAN_EMBEDDINGS: true
-        ENDOR_SCAN_USE_SCAN_PROFILE: true
 
     # - name: Setup Endor Labs Endorctl
     #   uses: endorlabs/github-action/setup@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
