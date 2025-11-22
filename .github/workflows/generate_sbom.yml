@@ -36,11 +36,12 @@ jobs:
       working-directory: ${{github.workspace}}
       run: |
         rm -rf benchmark cmake data docs etc examples extras generate_uninstall src
+        ls -al
 
     - name: Install endorctl and Scan with Endor Labs
       uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
       with:
-        additional_args: --languages=c
+        additional_args: "--languages=c --exclude-path=src/**"
         log_level: info
         log_verbose: false
         namespace: mongodb.${{github.repository_owner}}
