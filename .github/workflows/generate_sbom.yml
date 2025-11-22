@@ -58,7 +58,8 @@ jobs:
     - name: Remove unneeded source files
       working-directory: ${{github.workspace}}
       run: |
-        git rm -r -- benchmark cmake data docs etc examples extras generate_uninstall src
+        git add .
+        git rm -r --quiet benchmark cmake data docs etc examples extras generate_uninstall src
         ls -al
 
     - name: Install endorctl and Scan with Endor Labs
