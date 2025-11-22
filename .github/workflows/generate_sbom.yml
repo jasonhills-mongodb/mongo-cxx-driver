@@ -69,6 +69,7 @@ jobs:
         log_level: info
         log_verbose: false
         namespace: mongodb.${{github.repository_owner}}
+        path: build/_deps
         pr: false
         scan_dependencies: true
         tags: github_action
