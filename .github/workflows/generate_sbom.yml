@@ -22,7 +22,7 @@ jobs:
         submodules: recursive
 
     - name: Install dev libs
-      run: sudo apt install -y libsasl2-dev libsnappy-dev libssl-dev libmongocrypt-dev
+      run: sudo apt install -y libsasl2-dev libsnappy-dev libssl-dev libmongocrypt-dev=1.13.0-1
 
     - name: Configure CMake and fetch dependency source
       env:
@@ -32,38 +32,43 @@ jobs:
       working-directory: ${{env.BUILD}}
       run: cmake .. -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_STANDARD=${{env.CXX_STANDARD}}
 
-    # - name: Install endorctl and Scan with Endor Labs
-    #   uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
-    #   with:
-    #     additional_args: --languages=c
-    #     log_level: info
-    #     log_verbose: false
-    #     namespace: mongodb.${{github.repository_owner}}
-    #     pr: false
-    #     scan_dependencies: true
-    #     tags: github_action
-    #   env:
-    #     ENDOR_SCAN_EMBEDDINGS: true
-
-    - name: Setup Endor Labs Endorctl
-      uses: endorlabs/github-action/setup@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
-      with:
-        namespace: mongodb.${{github.repository_owner}}
-        enable_github_action_token: true
-
-    - name: Run Endorctl
+    - name: Remove unneeded source files
       working-directory: ${{github.workspace}}
-      env:
-        ENDOR_GITHUB_ACTION_TOKEN_ENABLE: true
-        ENDOR_SCAN_DEPENDENCIES: true
-        ENDOR_SCAN_EMBEDDINGS: true
-        #ENDOR_SCAN_INCLUDE_PATH: "build/_deps/**"
-        ENDOR_SCAN_LANGUAGES: c
-        #ENDOR_SCAN_SUMMARY_OUTPUT_TYPE: json
-        ENDOR_SCAN_TAGS: github_action
-        ENDOR_LOG_VERBOSE: true
       run: |
-        endorctl scan
+        rm -rf benchmark cmake data docs etc examples extras generate_uninstall src
+
+    - name: Install endorctl and Scan with Endor Labs
+      uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
+      with:
+        additional_args: --languages=c
+        log_level: info
+        log_verbose: false
+        namespace: mongodb.${{github.repository_owner}}
+        pr: false
+        scan_dependencies: true
+        tags: github_action
+      env:
+        ENDOR_SCAN_EMBEDDINGS: true
+
+    # - name: Setup Endor Labs Endorctl
+    #   uses: endorlabs/github-action/setup@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
+    #   with:
+    #     namespace: mongodb.${{github.repository_owner}}
+    #     enable_github_action_token: true
+
+    # - name: Run Endorctl
+    #   working-directory: ${{github.workspace}}
+    #   env:
+    #     ENDOR_GITHUB_ACTION_TOKEN_ENABLE: true
+    #     ENDOR_SCAN_DEPENDENCIES: true
+    #     ENDOR_SCAN_EMBEDDINGS: true
+    #     #ENDOR_SCAN_INCLUDE_PATH: "build/_deps/**"
+    #     ENDOR_SCAN_LANGUAGES: c
+    #     ENDOR_SCAN_SUMMARY_OUTPUT_TYPE: json
+    #     ENDOR_SCAN_TAGS: github_action
+    #     ENDOR_LOG_VERBOSE: true
+    #   run: |
+    #     endorctl scan
 
     # - uses: actions/setup-python@v6
     #   with:
