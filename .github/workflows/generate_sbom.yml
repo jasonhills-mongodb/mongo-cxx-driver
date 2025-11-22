@@ -61,29 +61,30 @@ jobs:
     #     git rm -r -- benchmark cmake data docs etc examples extras generate_uninstall src
     #     ls -al
 
-    # - name: Install endorctl and Scan with Endor Labs
-    #   uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
-    #   with:
-    #     #additional_args: "--languages=c --exclude-path=\"benchmark/**\" --exclude-path=\"src/**\" --exclude-path=\"build/CMakeFiles/**\""
-    #     log_level: info
-    #     log_verbose: false
-    #     namespace: mongodb.${{github.repository_owner}}
-    #     pr: false
-    #     scan_dependencies: true
-    #     tags: github_action
-    #   env:
-    #     ENDOR_SCAN_EMBEDDINGS: true
-
-    - name: Setup Endor Labs Endorctl
-      uses: endorlabs/github-action/setup@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
+    - name: Install endorctl and Scan with Endor Labs
+      uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
       with:
+        #additional_args: "--languages=c --exclude-path=\"benchmark/**\" --exclude-path=\"src/**\" --exclude-path=\"build/CMakeFiles/**\""
+        log_level: info
+        log_verbose: false
         namespace: mongodb.${{github.repository_owner}}
-        enable_github_action_token: true
-
-    - name: Run Endorctl
+        pr: false
+        scan_dependencies: true
+        tags: github_action
       env:
+        ENDOR_SCAN_EMBEDDINGS: true
         ENDOR_SCAN_USE_SCAN_PROFILE: true
-      run: endorctl scan
+
+    # - name: Setup Endor Labs Endorctl
+    #   uses: endorlabs/github-action/setup@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
+    #   with:
+    #     namespace: mongodb.${{github.repository_owner}}
+    #     enable_github_action_token: true
+
+    # - name: Run Endorctl
+    #   env:
+    #     ENDOR_SCAN_USE_SCAN_PROFILE: true
+    #   run: endorctl scan
 
     # - uses: actions/setup-python@v6
     #   with:
