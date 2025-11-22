@@ -30,7 +30,7 @@ jobs:
         BUILD: ${{github.workspace}}/build
         CXX_STANDARD: 17
       working-directory: ${{env.BUILD}}
-      run: cmake .. -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_STANDARD=${{env.CXX_STANDARD}}
+      run: cmake .. -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_STANDARD=${{env.CXX_STANDARD}} -DENABLE_TESTS=ON
 
     # - name: Remove unneeded source files
     #   working-directory: ${{github.workspace}}
@@ -41,7 +41,7 @@ jobs:
     - name: Install endorctl and Scan with Endor Labs
       uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
       with:
-        additional_args: "--languages=c --exclude-path=\"src/**\""
+        additional_args: "--languages=c --exclude-path=\"benchmark/**\" --exclude-path=\"src/**\" --exclude-path=\"build/CMakeFiles/**\""
         log_level: info
         log_verbose: false
         namespace: mongodb.${{github.repository_owner}}
