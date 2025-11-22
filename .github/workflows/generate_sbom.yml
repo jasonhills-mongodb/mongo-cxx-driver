@@ -32,6 +32,29 @@ jobs:
       working-directory: ${{env.BUILD}}
       run: cmake .. -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_STANDARD=${{env.CXX_STANDARD}} -DENABLE_TESTS=ON
 
+    - name: Create and populate .endorctl/scanprofile.yaml file
+      run: |
+        mkdir .endorctl
+        cat <<EOF > .endorctl/scanprofile.yaml
+        kind: AutomatedScanParameters
+        spec:
+          automated_scan_parameters:
+            additional_environment_variables:
+              - ENDOR_SCAN_EMBEDDINGS=true
+            included_paths:
+              - build/_deps/**
+            #excluded_paths:
+            #  - benchmark/**
+            #  - src/**
+            languages:
+              - c
+            scan_dependencies: true
+            tags: github_action
+        EOF
+        git add .endorctl/scanprofile.yaml
+        echo "cat .endorctl/scanprofile.yaml"
+        cat .endorctl/scanprofile.yaml
+
     # - name: Remove unneeded source files
     #   working-directory: ${{github.workspace}}
     #   run: |
@@ -56,28 +79,6 @@ jobs:
       with:
         namespace: mongodb.${{github.repository_owner}}
         enable_github_action_token: true
-
-    - name: Create and populate .endorctl/scanprofile.yaml file
-      run: |
-        mkdir .endorctl
-        cat <<EOF > .endorctl/scanprofile.yaml
-        kind: AutomatedScanParameters
-        spec:
-          automated_scan_parameters:
-            additional_environment_variables:
-              - ENDOR_SCAN_EMBEDDINGS=true
-            included_paths:
-              - build/_deps/**
-            #excluded_paths:
-            #  - benchmark/**
-            #  - src/**
-            languages:
-              - c
-            scan_dependencies: true
-            tags: github_action
-        EOF
-        echo "cat .endorctl/scanprofile.yaml"
-        cat .endorctl/scanprofile.yaml
 
     - name: Run Endorctl
       run: endorctl scan
