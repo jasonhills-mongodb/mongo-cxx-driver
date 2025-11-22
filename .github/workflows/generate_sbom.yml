@@ -3,10 +3,10 @@ name: Generate SBOM
 on:
   workflow_dispatch:
   push:
-    branches:
-      - 'master'
-      - 'releases/**'
-      - 'CXX**'
+    # branches:
+    #   - 'master'
+    #   - 'releases/**'
+    #   - 'CXX**'
 
 jobs:
   configure-and-scan:
