@@ -52,6 +52,7 @@ jobs:
         enable_github_action_token: true
 
     - name: Run Endorctl
+      working-directory: ${{github.workspace}}
       env:
         ENDOR_GITHUB_ACTION_TOKEN_ENABLE: true
         ENDOR_SCAN_DEPENDENCIES: true
@@ -60,6 +61,7 @@ jobs:
         ENDOR_SCAN_LANGUAGES: c
         #ENDOR_SCAN_SUMMARY_OUTPUT_TYPE: json
         ENDOR_SCAN_TAGS: github_action
+        ENDOR_LOG_VERBOSE: true
       run: |
         endorctl scan
 
