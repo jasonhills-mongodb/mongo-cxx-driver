@@ -57,7 +57,7 @@ jobs:
         ENDOR_GITHUB_ACTION_TOKEN_ENABLE: true
         ENDOR_SCAN_DEPENDENCIES: true
         ENDOR_SCAN_EMBEDDINGS: true
-        ENDOR_SCAN_INCLUDE_PATH: "build/_deps/**"
+        #ENDOR_SCAN_INCLUDE_PATH: "build/_deps/**"
         ENDOR_SCAN_LANGUAGES: c
         #ENDOR_SCAN_SUMMARY_OUTPUT_TYPE: json
         ENDOR_SCAN_TAGS: github_action
