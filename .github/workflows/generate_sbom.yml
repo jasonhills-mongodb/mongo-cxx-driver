@@ -38,10 +38,25 @@ jobs:
     #     git rm -r -- benchmark cmake data docs etc examples extras generate_uninstall src
     #     ls -al
 
+    - name: Create and populate .endorctl/scanprofile.yaml file
+      run: |
+        md .endorctl
+        cat <<EOF > .endorctl/scanprofile.yaml
+        kind: AutomatedScanParameters
+        spec:
+          automated_scan_parameters:
+            included_paths:
+              - build/_deps/**
+            languages:
+              - c
+        EOF
+        echo "cat .endorctl/scanprofile.yaml"
+        cat .endorctl/scanprofile.yaml
+
     - name: Install endorctl and Scan with Endor Labs
       uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # Release v1.1.8
       with:
-        additional_args: "--languages=c --exclude-path=\"benchmark/**\" --exclude-path=\"src/**\" --exclude-path=\"build/CMakeFiles/**\""
+        #additional_args: "--languages=c --exclude-path=\"benchmark/**\" --exclude-path=\"src/**\" --exclude-path=\"build/CMakeFiles/**\""
         log_level: info
         log_verbose: false
         namespace: mongodb.${{github.repository_owner}}
