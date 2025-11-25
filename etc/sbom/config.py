@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """generate_sbom.py config. Operational configuration values stored separately from the core code."""
 
-import json
 import logging
 import re
 
@@ -24,7 +23,16 @@ prefixes = [
     "pkg:github/",
 ]
 
-for component in endor_components_remove:
+components_remove = [
+    # Endor Labs includes the main component in 'components'. This is not standard, so we remove it.
+    "10gen/mongo",
+    # should be pkg:github/antirez/linenoise - waiting on Endor Labs fix
+    "amokhuginnsson/replxx",
+    # a transitive dependency of s2 that is not necessary to include
+    "sparsehash/sparsehash",
+]
+
+for component in components_remove:
     for prefix in prefixes:
         endor_components_remove.append(prefix + component)
 
@@ -40,56 +48,6 @@ endor_components_rename = [
     ["pkg:generic/github.com/", "pkg:github/"],
     ["pkg:c/github.com/", "pkg:github/"],
 ]
-
-# ################ PURL Validation ################
-REGEX_STR_PURL_OPTIONAL = (  # Optional Version (any chars except ? @ #)
-    r"(?:@[^?@#]*)?"
-    # Optional Qualifiers (any chars except @ #)
-    r"(?:\?[^@#]*)?"
-    # Optional Subpath (any chars)
-    r"(?:#.*)?$"
-)
-
-REGEX_PURL = {
-    # deb PURL. https://github.com/package-url/purl-spec/blob/main/types-doc/deb-definition.md
-    "deb": re.compile(
-        r"^pkg:deb/"  # Scheme and type
-        # Namespace (organization/user), letters must be lowercase
-        r"(debian|ubuntu)+"
-        r"/"
-        r"[a-z0-9._-]+" + REGEX_STR_PURL_OPTIONAL  # Name
-    ),
-    # Generic PURL. https://github.com/package-url/purl-spec/blob/main/types-doc/generic-definition.md
-    "generic": re.compile(
-        r"^pkg:generic/"  # Scheme and type
-        r"([a-zA-Z0-9._-]+/)?"  # Optional namespace segment
-        r"[a-zA-Z0-9._-]+" + REGEX_STR_PURL_OPTIONAL  # Name (required)
-    ),
-    # GitHub PURL. https://github.com/package-url/purl-spec/blob/main/types-doc/github-definition.md
-    "github": re.compile(
-        r"^pkg:github/"  # Scheme and type
-        # Namespace (organization/user), letters must be lowercase
-        r"[a-z0-9-]+"
-        r"/"
-        r"[a-z0-9._-]+" + REGEX_STR_PURL_OPTIONAL  # Name (repository)
-    ),
-    # PyPI PURL. https://github.com/package-url/purl-spec/blob/main/types-doc/pypi-definition.md
-    "pypi": re.compile(
-        r"^pkg:pypi/"  # Scheme and type
-        r"[a-z0-9_-]+"  # Name, letters must be lowercase, dashes, underscore
-        + REGEX_STR_PURL_OPTIONAL
-    ),
-}
-
-
-def is_valid_purl(purl: str) -> bool:
-    """Validate a GitHub or Generic PURL"""
-    for purl_type, regex in REGEX_PURL.items():
-        if regex.match(purl):
-            logger.debug(f"PURL: {purl} matched PURL type '{purl_type}' regex '{regex.pattern}'")
-            return True
-    return False
-
 
 # ################ Version Transformation ################
 
@@ -140,65 +98,8 @@ def get_semver_from_release_version(release_ver: str) -> str:
 # region special component use-case functions
 
 
-def get_version_from_wiredtiger_import_data(file_path: str) -> str:
-    """Get the info in the 'import.data' file saved in the wiredtiger folder"""
-    try:
-        with open(file_path, "r") as input_json:
-            import_data = input_json.read()
-        result = json.loads(import_data)
-    except Exception as e:
-        logger.error(f"Error loading JSON file from {file_path}")
-        logger.error(e)
-        return None
-    return result.get("commit")
-
-
-def get_version_sasl_from_workspace(file_path: str) -> str:
-    """Determine the version that is pulled for Windows Cyrus SASL by searching WORKSPACE.bazel"""
-    # e.g.,
-    #         "https://s3.amazonaws.com/boxes.10gen.com/build/windows_cyrus_sasl-2.1.28.zip",
-    try:
-        with open(file_path, "r") as file:
-            for line in file:
-                if line.strip().startswith(
-                    '"https://s3.amazonaws.com/boxes.10gen.com/build/windows_cyrus_sasl-'
-                ):
-                    return line.strip().split("windows_cyrus_sasl-")[1].split(".zip")[0]
-    except Exception as e:
-        logger.warning(f"Unable to load {file_path}")
-        logger.warning(e)
-    else:
-        return None
-
-
 def process_component_special_cases(
     component_key: str, component: dict, versions: dict, repo_root: str
 ) -> None:
-    ## Special case for Cyrus SASL ##
-    if component_key == "pkg:github/cyrusimap/cyrus-sasl":
-        # Cycrus SASL is optionally loaded as a Windows library, when needed. There is no source code for Endor Labs to scan.
-        # The version of Cyrus SASL that is used is defined in the WORKSPACE.bazel file:
-        #         "https://s3.amazonaws.com/boxes.10gen.com/build/windows_cyrus_sasl-2.1.28.zip",
-        # Rather than add the complexity of Bazel queries to this script, we just search the text.
-
-        versions["import_script"] = get_version_sasl_from_workspace(repo_root + "/WORKSPACE.bazel")
-        logger.info(
-            f"VERSION SPECIAL CASE: {component_key}: Found version '{versions['import_script']}' in 'WORKSPACE.bazel' file"
-        )
-
-    ## Special case for wiredtiger ##
-    elif component_key == "pkg:github/wiredtiger/wiredtiger":
-        # MongoDB release branches import wiredtiger commits via a bot. These commits will likely not line up with a release or tag.
-        # Endor labs will try to pull the nearest release/tag, but we want the more precise commit hash, which is stored in:
-        # src/third_party/wiredtiget/import.data
-        occurrences = component.get("evidence", {}).get("occurrences", [])
-        if occurrences:
-            location = occurrences[0].get("location")
-            versions["import_script"] = get_version_from_wiredtiger_import_data(
-                f"{repo_root}/{location}/import.data"
-            )
-            logger.info(
-                f"VERSION SPECIAL CASE: {component_key}: Found version '{versions['import_script']}' in 'import.data' file"
-            )
-
+    pass
 # endregion special component use-case functions

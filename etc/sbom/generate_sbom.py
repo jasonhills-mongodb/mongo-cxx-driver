@@ -23,7 +23,6 @@ from config import (
     endor_components_remove,
     endor_components_rename,
     get_semver_from_release_version,
-    is_valid_purl,
     process_component_special_cases,
 )
 from endorctl_utils import EndorCtl
@@ -54,7 +53,6 @@ warning_handler = WarningListHandler()
 # Add the handler to the logger
 logger.addHandler(warning_handler)
 
-
 # Get the absolute path of the script file and directory
 script_path = Path(__file__).resolve()
 script_directory = script_path.parent
@@ -65,6 +63,65 @@ REGEX_GIT_BRANCH = r"^[a-zA-Z0-9_.\-/]+$"
 REGEX_GITHUB_URL = r"^(https://github.com/)([a-zA-Z0-9-]{1,39}/[a-zA-Z0-9-_.]{1,100})(\.git)$"
 REGEX_RELEASE_BRANCH = r"^v\d\.\d$"
 REGEX_RELEASE_TAG = r"^r\d\.\d.\d(-\w*)?$"
+
+# ################ PURL Validation ################
+REGEX_STR_PURL_OPTIONAL = (  # Optional Version (any chars except ? @ #)
+    r"(?:@[^?@#]*)?"
+    # Optional Qualifiers (any chars except @ #)
+    r"(?:\?[^@#]*)?"
+    # Optional Subpath (any chars)
+    r"(?:#.*)?$"
+)
+
+REGEX_PURL = {
+    # deb PURL. https://github.com/package-url/purl-spec/blob/main/types-doc/deb-definition.md
+    "deb": re.compile(
+        r"^pkg:deb/"  # Scheme and type
+        # Namespace (organization/user), letters must be lowercase
+        r"(debian|ubuntu)+"
+        r"/"
+        r"[a-z0-9._-]+" + REGEX_STR_PURL_OPTIONAL  # Name
+    ),
+    # Generic PURL. https://github.com/package-url/purl-spec/blob/main/types-doc/generic-definition.md
+    "generic": re.compile(
+        r"^pkg:generic/"  # Scheme and type
+        r"([a-zA-Z0-9._-]+/)?"  # Optional namespace segment
+        r"[a-zA-Z0-9._-]+" + REGEX_STR_PURL_OPTIONAL  # Name (required)
+    ),
+    # GitHub PURL. https://github.com/package-url/purl-spec/blob/main/types-doc/github-definition.md
+    "github": re.compile(
+        r"^pkg:github/"  # Scheme and type
+        # Namespace (organization/user), letters must be lowercase
+        r"[a-z0-9-]+"
+        r"/"
+        r"[a-z0-9._-]+" + REGEX_STR_PURL_OPTIONAL  # Name (repository)
+    ),
+    # PyPI PURL. https://github.com/package-url/purl-spec/blob/main/types-doc/pypi-definition.md
+    "pypi": re.compile(
+        r"^pkg:pypi/"  # Scheme and type
+        r"[a-z0-9_-]+"  # Name, letters must be lowercase, dashes, underscore
+        + REGEX_STR_PURL_OPTIONAL
+    ),
+}
+
+
+# Metadata SBOM requirements
+METADATA_FIELDS_REQUIRED = [
+    "type",
+    "bom-ref",
+    "group",
+    "name",
+    "version",
+    "description",
+    "licenses",
+    "copyright",
+    "externalReferences",
+    "scope",
+]
+METADATA_FIELDS_ONE_OF = [
+    ["author", "supplier"],
+    ["purl", "cpe"],
+]
 
 # endregion init
 
@@ -80,7 +137,11 @@ class GitInfo:
         try:
             self.repo_root = Path(
                 subprocess.run(
-                    "git rev-parse --show-toplevel", shell=True, text=True, capture_output=True
+                    "git rev-parse --show-toplevel",
+                    shell=True,
+                    text=True,
+                    capture_output=True,
+                    check=True,
                 ).stdout.strip()
             )
             self._repo = Repo(self.repo_root)
@@ -170,6 +231,15 @@ def extract_repo_from_git_url(git_url: str) -> dict:
     }
 
 
+def is_valid_purl(purl: str) -> bool:
+    """Validate a GitHub or Generic PURL"""
+    for purl_type, regex in REGEX_PURL.items():
+        if regex.match(purl):
+            logger.debug(f"PURL: {purl} matched PURL type '{purl_type}' regex '{regex.pattern}'")
+            return True
+    return False
+
+
 def sbom_components_to_dict(sbom: dict, with_version: bool = False) -> dict:
     """Create a dict of SBOM components with a version-less PURL as the key"""
     components = sbom["components"]
@@ -183,6 +253,23 @@ def sbom_components_to_dict(sbom: dict, with_version: bool = False) -> dict:
             for component in components
         }
     return components_dict
+
+
+def check_metadata_sbom(meta_bom: dict) -> None:
+    for component in meta_bom["components"]:
+        for field in METADATA_FIELDS_REQUIRED:
+            if field not in component:
+                logger.warning(
+                    f"METADATA: '{component['bom-ref'] or component['name']} is missing required field '{field}'."
+                )
+        for fields in METADATA_FIELDS_ONE_OF:
+            found = False
+            for field in fields:
+                found = found or field in component
+            if not found:
+                logger.warning(
+                    f"METADATA: '{component['bom-ref'] or component['name']} is missing one of fields '{fields}'."
+                )
 
 
 def read_sbom_json_file(file_path: str) -> dict:
@@ -204,8 +291,8 @@ def write_sbom_json_file(sbom_dict: dict, file_path: str) -> None:
     try:
         file_path = os.path.abspath(file_path)
         with open(file_path, "w", encoding="utf-8") as output_json:
-            json.dump(sbom_dict, output_json, indent=2)
-            output_json.write("\n")
+            formatted_sbom = json.dumps(sbom_dict, indent=2) + "\n"
+            output_json.write(formatted_sbom)
     except Exception as e:
         logger.error(f"Error writing SBOM file to {file_path}")
         logger.error(e)
@@ -449,6 +536,8 @@ def main() -> None:
         endor_bom = endorctl.get_sbom_for_branch(git_info.project, git_info.branch)
     elif target == "project":
         endor_bom = endorctl.get_sbom_for_project(git_info.project)
+    else:
+        endor_bom = None
 
     if not endor_bom:
         logger.error("Empty result for Endor SBOM!")
@@ -466,9 +555,6 @@ def main() -> None:
 
     ## remove uneeded components ##
     # [list]endor_components_remove is defined in config.py
-    # Endor Labs includes the main component in 'components'. This is not standard, so we remove it.
-    endor_components_remove.append(f"pkg:github/{git_info.org}/{git_info.repo}")
-    
     # Reverse iterate the SBOM components list to safely modify in situ
     for i in range(len(endor_bom["components"]) - 1, -1, -1):
         component = endor_bom["components"][i]
@@ -529,6 +615,9 @@ def main() -> None:
     meta_bom["components"].sort(key=lambda c: c["bom-ref"])
     prev_bom["components"].sort(key=lambda c: c["bom-ref"])
 
+    # Check metadata SBOM for completeness
+    check_metadata_sbom(meta_bom)
+
     # Create SBOM component lookup dicts
     endor_components = sbom_components_to_dict(endor_bom)
     prev_components = sbom_components_to_dict(prev_bom)
@@ -537,7 +626,7 @@ def main() -> None:
 
     # Attempt to determine the MongoDB Version being scanned
     logger.debug(
-        f"Available MongoDB version options, tag: {git_info.release_tag}, branch: {git_info.branch}, previous SBOM: {prev_bom['metadata'].get('component',{}).get('version')}"
+        f"Available MongoDB version options, tag: {git_info.release_tag}, branch: {git_info.branch}, previous SBOM: {prev_bom['metadata']['component']['version']}"
     )
     meta_bom_ref = meta_bom["metadata"]["component"]["bom-ref"]
 

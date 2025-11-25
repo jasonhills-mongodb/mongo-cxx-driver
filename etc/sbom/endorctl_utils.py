@@ -437,7 +437,7 @@ class EndorCtl:
 
             # ScanResult: search for a completed scan
             filter_str = endor_filter.scan_result(
-                None, project_uuid, repository_version_ref, repository_version_sha
+                EndorContextType.MAIN, project_uuid, repository_version_ref, repository_version_sha
             )
             scan_result = self.get_scan_result(filter_str, retry=False)
             project_uuid = scan_result["meta"]["parent_uuid"]
