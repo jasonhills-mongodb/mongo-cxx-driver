@@ -12,7 +12,7 @@ logger.setLevel(logging.NOTSET)
 # ################ Component Filters ################
 
 # List of Endor Labs SBOM components that must be removed before processing
-endor_components_remove = [
+components_remove = [
     # A dependency erroneously matched in build/CMakeFiles
     'mozilla/cubeb',
     # An incorrect match from parts of pkg:github/madler/zlib
@@ -26,9 +26,10 @@ prefixes = [
     'pkg:github/',
 ]
 
-for component in endor_components_remove:
+endor_components_remove=[]
+for component in components_remove:
     for prefix in prefixes:
-        component = prefix + component
+        endor_components_remove.append(prefix + component)
 
 # ################ Component Renaming ################
 # Endor does not have syntactically valid PURLs for C/C++ packages.

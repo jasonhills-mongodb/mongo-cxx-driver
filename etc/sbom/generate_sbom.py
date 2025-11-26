@@ -533,6 +533,7 @@ def main() -> None:
             logger.error('Check Endor Labs for status of the target monitoring scan.')
         sys.exit(1)
 
+    logger.info(f'Endor Labs SBOM exported with {len(endor_bom["components"])} components')
     # endregion export Endor Labs SBOM
 
     # region Pre-process Endor Labs SBOM
