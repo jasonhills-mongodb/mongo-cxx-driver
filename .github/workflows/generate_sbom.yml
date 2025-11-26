@@ -10,6 +10,8 @@ on:
 
 jobs:
   configure-and-scan:
+    strategy:
+      fail-fast: false
     permissions:
       id-token: write # Required to request a json web token (JWT) for keyless authentication with Endor Labs
       contents: read
