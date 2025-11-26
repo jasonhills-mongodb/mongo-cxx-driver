@@ -52,4 +52,14 @@ jobs:
     - name: Install dependencies
       run: uv sync --group make_release
     - name: generate_sbom.py
-      run: uv run etc/sbom/generate_sbom.py --enable-github-action-token --target=branch --sbom-metadata=etc/sbom/metadata.cdx.json
+      run: uv run etc/sbom/generate_sbom.py --enable-github-action-token --target=branch --sbom-metadata=etc/sbom/metadata.cdx.json --save-warnings=${{runner.temp}}/warnings.txt
+
+    - name: Open Pull Request
+      uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412 # v7.0.9
+      with:
+        add-paths: sbom.json
+        body-path: ${{runner.temp}}/warnings.txt
+        branch: cxx-sbom-update
+        commit-message: Update SBOM file(s)
+        delete-branch: true
+        title: CXX Update SBOM action

@@ -53,6 +53,13 @@ make_release = [
     "pygithub>=2.1",
 ]
 
+sbom = [
+    # etc/sbom/generate_sbom.py
+    "gitpython>=3.1",
+    "pygithub>=2.1",
+    "semver>=3.0.0",
+]
+
 [tool.ruff]
 line-length = 120
 src = [".evergreen", "etc"]

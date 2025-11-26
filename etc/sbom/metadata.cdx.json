@@ -142,7 +142,8 @@
           "url": "https://github.com/juliastrings/utf8proc.git",
           "type": "distribution"
         }
-      ]
+      ],
+      "scope": "required"
     },
     {
       "type": "library",
@@ -237,6 +238,7 @@
       "bom-ref": "pkg:github/troydhanson/uthash@{{VERSION}}",
       "type": "library",
       "author": "Troy D. Hanson",
+      "group": "troydhanson",
       "name": "github.com/troydhanson/uthash",
       "version": "{{VERSION}}",
       "description": "C macros for hash tables and more",
@@ -254,7 +256,8 @@
           "url": "https://github.com/troydhanson/uthash.git",
           "type": "distribution"
         }
-      ]
+      ],
+      "scope": "required"
     }
   ],
   "dependencies": [
