@@ -1,19 +1,197 @@
 {
-  "components": [
-    {
-      "bom-ref": "pkg:github/mongodb/mongo-c-driver@2.1.2",
-      "copyright": "Copyright 2009-present MongoDB, Inc.",
+  "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:14f3bbeb-851e-43f7-8e5c-26e087cc0970",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2025-11-26T20:24:04Z",
+    "lifecycles": [
+      {
+        "phase": "pre-build"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "bom-ref": "pkg:github/mongodb/mongo-cxx-driver@sbom_github_action",
+      "supplier": {
+        "name": "MongoDB, Inc.",
+        "url": [
+          "https://mongodb.com"
+        ]
+      },
+      "author": "MongoDB, Inc.",
+      "publisher": "MongoDB, Inc.",
+      "group": "mongodb",
+      "name": "mongo-cxx-driver",
+      "description": "C++ Driver for MongoDB",
+      "version": "sbom_github_action",
+      "cpe": "cpe:2.3:a:mongodb:c++:sbom_github_action:*:*:*:*:*:*:*",
+      "purl": "pkg:github/mongodb/mongo-cxx-driver@sbom_github_action",
       "externalReferences": [
         {
-          "type": "distribution",
-          "url": "https://github.com/mongodb/mongo-c-driver/archive/refs/tags/2.1.2.tar.gz"
+          "type": "license",
+          "url": "https://raw.githubusercontent.com/mongodb/mongo-cxx-driver/refs/heads/master/LICENSE",
+          "comment": "Apache License 2.0"
         },
         {
           "type": "website",
-          "url": "https://github.com/mongodb/mongo-c-driver/tree/2.1.2"
+          "url": "https://www.mongodb.com/docs/languages/cpp/cpp-driver/",
+          "comment": "Documentation site for the official MongoDB C++ Driver."
+        },
+        {
+          "type": "release-notes",
+          "url": "https://www.mongodb.com/docs/languages/cpp/cpp-driver/current/whats-new/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/mongodb/mongo-cxx-driver"
+        }
+      ]
+    },
+    "supplier": {
+      "name": "MongoDB, Inc.",
+      "url": [
+        "https://mongodb.com"
+      ]
+    },
+    "tools": {
+      "services": [
+        {
+          "name": "Endor Labs Inc",
+          "version": "v1.7.671"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "bom-ref": "pkg:github/catchorg/catch2@v3.8.1",
+      "type": "library",
+      "author": "Martin Ho\u0159e\u0148ovsk\u00fd",
+      "group": "catchorg",
+      "name": "Catch2",
+      "version": "3.8.1",
+      "description": "A modern, C++-native, test framework for unit-tests, TDD and BDD.",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSL-1.0"
+          }
         }
       ],
+      "copyright": "Copyright Catch2 Authors",
+      "purl": "pkg:github/catchorg/catch2@v3.8.1",
+      "externalReferences": [
+        {
+          "url": "https://github.com/catchorg/catch2.git",
+          "type": "distribution"
+        }
+      ],
+      "scope": "excluded"
+    },
+    {
+      "bom-ref": "pkg:github/catchorg/clara@v1.1.5",
+      "type": "library",
+      "author": "Phil Nash",
+      "group": "catchorg",
+      "name": "Clara",
+      "version": "1.1.5",
+      "description": "A simple to use, composable, command line parser for C++ 11 and beyond",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSL-1.0"
+          }
+        }
+      ],
+      "copyright": "Copyright 2017 Two Blue Cubes Ltd. All rights reserved.",
+      "purl": "pkg:github/catchorg/clara@v1.1.5",
+      "externalReferences": [
+        {
+          "url": "https://github.com/catchorg/clara.git",
+          "type": "distribution"
+        }
+      ],
+      "scope": "excluded"
+    },
+    {
+      "bom-ref": "pkg:github/juliastrings/utf8proc@v2.8.0",
+      "type": "library",
+      "author": "Jan Behrens, the Public Software Group, the Julia-language developers",
+      "supplier": {
+        "name": "The Julia Programming Language",
+        "url": [
+          "https://julialang.org/"
+        ]
+      },
+      "group": "JuliaStrings",
+      "name": "utf8proc",
+      "version": "2.8.0",
+      "description": "A clean C library for processing UTF-8 Unicode data",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "copyright": "Copyright \u00a9 2014-2021 by Steven G. Johnson, Jiahao Chen, Tony Kelman, Jonas Fonseca, and other contributors listed in the git history.",
+      "purl": "pkg:github/juliastrings/utf8proc@v2.8.0",
+      "externalReferences": [
+        {
+          "url": "https://github.com/juliastrings/utf8proc.git",
+          "type": "distribution"
+        }
+      ],
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:github/madler/zlib@1.3.1",
+      "supplier": {
+        "name": "zlib",
+        "url": [
+          "https://zlib.net/"
+        ]
+      },
+      "author": "Jean-loup Gailly, Mark Adler",
+      "group": "madler",
+      "name": "zlib",
+      "version": "1.3.1",
+      "description": "zlib is a general purpose data compression library.",
+      "licenses": [
+        {
+          "license": {
+            "id": "Zlib"
+          }
+        }
+      ],
+      "copyright": "Copyright \u00a9 1995-2024 Jean-loup Gailly and Mark Adler.",
+      "cpe": "cpe:2.3:a:zlib:zlib:1.3.1:*:*:*:*:*:*:*",
+      "purl": "pkg:github/madler/zlib@1.3.1",
+      "externalReferences": [
+        {
+          "url": "https://zlib.net/fossils/",
+          "type": "distribution"
+        }
+      ],
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:github/mongodb/libmongocrypt@1.16.0",
+      "supplier": {
+        "name": "MongoDB, Inc.",
+        "url": [
+          "https://mongodb.com"
+        ]
+      },
+      "author": "MongoDB, Inc.",
       "group": "mongodb",
+      "name": "libmongocrypt",
+      "version": "1.16.0",
+      "description": "C library for Client Side and Queryable Encryption in MongoDB",
       "licenses": [
         {
           "license": {
@@ -21,65 +199,204 @@
           }
         }
       ],
-      "name": "mongo-c-driver",
-      "purl": "pkg:github/mongodb/mongo-c-driver@2.1.2",
+      "copyright": "Copyright 2019-present MongoDB, Inc.",
+      "cpe": "cpe:2.3:a:mongodb:libmongocrypt:1.16.0:*:*:*:*:*:*:*",
+      "purl": "pkg:github/mongodb/libmongocrypt@1.16.0",
+      "externalReferences": [
+        {
+          "url": "https://github.com/mongodb/libmongocrypt.git",
+          "type": "distribution"
+        }
+      ],
+      "scope": "optional"
+    },
+    {
       "type": "library",
-      "version": "2.1.2"
+      "bom-ref": "pkg:github/mongodb/mongo-c-driver@2.1.2",
+      "supplier": {
+        "name": "MongoDB, Inc.",
+        "url": [
+          "https://mongodb.com"
+        ]
+      },
+      "author": "MongoDB, Inc.",
+      "group": "mongodb",
+      "name": "MongoDB C Driver",
+      "version": "2.1.2",
+      "description": "The Official MongoDB driver for C language",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "copyright": "2009-present, MongoDB, Inc.",
+      "cpe": "cpe:2.3:a:mongodb:c_driver:2.1.2:*:*:*:*:*:*:*",
+      "purl": "pkg:github/mongodb/mongo-c-driver@2.1.2",
+      "externalReferences": [
+        {
+          "url": "https://github.com/mongodb/mongo-c-driver.git",
+          "type": "distribution"
+        }
+      ],
+      "scope": "required"
+    },
+    {
+      "bom-ref": "pkg:github/troydhanson/uthash@v2.3.0",
+      "type": "library",
+      "author": "Troy D. Hanson",
+      "group": "troydhanson",
+      "name": "github.com/troydhanson/uthash",
+      "version": "2.3.0",
+      "description": "C macros for hash tables and more",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-1-Clause"
+          }
+        }
+      ],
+      "copyright": "Copyright (c) 2005-2025, Troy D. Hanson",
+      "purl": "pkg:github/troydhanson/uthash@v2.3.0",
+      "externalReferences": [
+        {
+          "url": "https://github.com/troydhanson/uthash.git",
+          "type": "distribution"
+        }
+      ],
+      "scope": "required"
+    },
+    {
+      "bom-ref": "pkg:github/jasonhills-mongodb/mongo-cxx-driver@sbom_github_action?package-id=0999c3478a09a2e2",
+      "name": "github.com/jasonhills-mongodb/mongo-cxx-driver",
+      "purl": "pkg:github/jasonhills-mongodb/mongo-cxx-driver@sbom_github_action",
+      "type": "library",
+      "version": "sbom_github_action",
+      "scope": "excluded"
+    },
+    {
+      "bom-ref": "pkg:github/mongodb/mongo-cxx-driver@r4.1.1?package-id=c2042e84ed2ed5ca",
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/mongodb/mongo-cxx-driver.git"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "name": "github.com/mongodb/mongo-cxx-driver",
+      "purl": "pkg:github/mongodb/mongo-cxx-driver@r4.1.1",
+      "type": "library",
+      "version": "r4.1.1",
+      "scope": "excluded"
+    },
+    {
+      "bom-ref": "pkg:github/mozilla/cubeb@471c7e209cf152414c0498f0c4015f9ff9b2f1c0?package-id=dd972228bb636626",
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/mozilla/cubeb.git"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "name": "github.com/mozilla/cubeb",
+      "purl": "pkg:github/mozilla/cubeb@471c7e209cf152414c0498f0c4015f9ff9b2f1c0",
+      "type": "library",
+      "version": "471c7e209cf152414c0498f0c4015f9ff9b2f1c0",
+      "scope": "excluded"
+    },
+    {
+      "bom-ref": "pkg:github/zlib-ng/zlib-ng@343c4c549107d31f6eeabfb4b31bec4502a2ea0e?package-id=8369b3e53cb7a837",
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/zlib-ng/zlib-ng.git"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Zlib"
+          }
+        }
+      ],
+      "name": "github.com/zlib-ng/zlib-ng",
+      "purl": "pkg:github/zlib-ng/zlib-ng@343c4c549107d31f6eeabfb4b31bec4502a2ea0e",
+      "type": "library",
+      "version": "343c4c549107d31f6eeabfb4b31bec4502a2ea0e",
+      "scope": "excluded"
     }
   ],
   "dependencies": [
     {
-      "ref": "pkg:github/mongodb/mongo-c-driver@2.1.2"
+      "ref": "pkg:github/mongodb/mongo-cxx-driver@sbom_github_action",
+      "dependsOn": [
+        "pkg:github/catchorg/catch2@v3.8.1",
+        "pkg:github/mongodb/mongo-c-driver@2.1.2"
+      ]
+    },
+    {
+      "ref": "pkg:github/catchorg/catch2@v3.8.1",
+      "dependsOn": [
+        "pkg:github/catchorg/clara@v1.1.5"
+      ]
+    },
+    {
+      "ref": "pkg:github/mongodb/mongo-c-driver@2.1.2",
+      "dependsOn": [
+        "pkg:github/madler/zlib@1.3.1",
+        "pkg:github/juliastrings/utf8proc@v2.8.0",
+        "pkg:github/mongodb/libmongocrypt@1.16.0",
+        "pkg:github/troydhanson/uthash@v2.3.0"
+      ]
+    },
+    {
+      "ref": "pkg:github/catchorg/clara@v1.1.5",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:github/juliastrings/utf8proc@v2.8.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:github/madler/zlib@1.3.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:github/mongodb/libmongocrypt@1.16.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:github/troydhanson/uthash@v2.3.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:github/jasonhills-mongodb/mongo-cxx-driver@sbom_github_action?package-id=0999c3478a09a2e2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:github/mongodb/mongo-cxx-driver@r4.1.1?package-id=c2042e84ed2ed5ca",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:github/mozilla/cubeb@471c7e209cf152414c0498f0c4015f9ff9b2f1c0?package-id=dd972228bb636626",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:github/zlib-ng/zlib-ng@343c4c549107d31f6eeabfb4b31bec4502a2ea0e?package-id=8369b3e53cb7a837",
+      "dependsOn": []
     }
-  ],
-  "metadata": {
-    "timestamp": "2025-10-07T17:27:33.460808+00:00",
-    "tools": [
-      {
-        "externalReferences": [
-          {
-            "type": "build-system",
-            "url": "https://github.com/CycloneDX/cyclonedx-python-lib/actions"
-          },
-          {
-            "type": "distribution",
-            "url": "https://pypi.org/project/cyclonedx-python-lib/"
-          },
-          {
-            "type": "documentation",
-            "url": "https://cyclonedx-python-library.readthedocs.io/"
-          },
-          {
-            "type": "issue-tracker",
-            "url": "https://github.com/CycloneDX/cyclonedx-python-lib/issues"
-          },
-          {
-            "type": "license",
-            "url": "https://github.com/CycloneDX/cyclonedx-python-lib/blob/main/LICENSE"
-          },
-          {
-            "type": "release-notes",
-            "url": "https://github.com/CycloneDX/cyclonedx-python-lib/blob/main/CHANGELOG.md"
-          },
-          {
-            "type": "vcs",
-            "url": "https://github.com/CycloneDX/cyclonedx-python-lib"
-          },
-          {
-            "type": "website",
-            "url": "https://github.com/CycloneDX/cyclonedx-python-lib/#readme"
-          }
-        ],
-        "name": "cyclonedx-python-lib",
-        "vendor": "CycloneDX",
-        "version": "6.4.4"
-      }
-    ]
-  },
-  "serialNumber": "urn:uuid:837d822c-50e1-45de-bd89-fad61a9600c7",
-  "version": 1,
-  "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
-  "bomFormat": "CycloneDX",
-  "specVersion": "1.5",
-  "vulnerabilities": []
+  ]
 }
