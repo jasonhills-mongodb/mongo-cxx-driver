@@ -56,10 +56,21 @@ class EndorContextType(Enum):
 
     # Objects from a scan of the default branch. All objects in the OSS namespace are in the main context. The context ID is always default.
     MAIN = "CONTEXT_TYPE_MAIN"
+    CONTEXT_TYPE_MAIN = "CONTEXT_TYPE_MAIN"
     # Objects from a scan of a specific branch. The context ID is the branch reference name.
     REF = "CONTEXT_TYPE_REF"
+    CONTEXT_TYPE_REF = "CONTEXT_TYPE_REF"
     # Objects from a PR scan. The context ID is the PR UUID. Objects in this context are deleted after 30 days.
     CI_RUN = "CONTEXT_TYPE_CI_RUN"
+    CONTEXT_TYPE_CI_RUN = "CONTEXT_TYPE_CI_RUN"
+    # Objects from an SBOM scan. The context ID is the SBOM serial number or some other unique identifier.
+    SBOM = "CONTEXT_TYPE_SBOM"
+    CONTEXT_TYPE_SBOM = "CONTEXT_TYPE_SBOM"
+    # Indicates that this object is a copy/temporary value of an object in another project. Used for same-tenant dependencies.
+    # In source code reference this is equivalent to “vendor” folders. Package versions in the external context are only scanned for call
+    # graphs. No other operations are performed on them.
+    EXTERNAL = "CONTEXT_TYPE_EXTERNAL"
+    CONTEXT_TYPE_EXTERNAL = "CONTEXT_TYPE_EXTERNAL"
 
 
 class EndorFilter:
@@ -78,8 +89,12 @@ class EndorFilter:
 
         return base_filters
 
-    def repository_version(self, project_uuid=None, sha=None, ref=None):
+    def repository_version(self, project_uuid=None, sha=None, ref=None, context_type:EndorContextType=None, context_type_exclude:EndorContextType=None):
         filters = self._base_filters()
+        if context_type:
+            filters.append(f"context.type=={context_type.value}")
+        if context_type_exclude:
+            filters.append(f"context.type!={context_type_exclude.value}")
         if project_uuid:
             filters.append(f"meta.parent_uuid=={project_uuid}")
         if sha:
@@ -428,8 +443,9 @@ class EndorCtl:
             app_name = project["spec"]["git"]["full_name"]
 
             # RepositoryVersion: get the context for the latest branch scan
-            filter_str = endor_filter.repository_version(project_uuid, ref=branch)
+            filter_str = endor_filter.repository_version(project_uuid, ref=branch, context_type_exclude=EndorContextType.CI_RUN)
             repository_version = self.get_repository_version(filter_str)
+            repository_version_context_type = EndorContextType[repository_version["context"]["type"]]
             repository_version_uuid = repository_version["uuid"]
             repository_version_ref = repository_version["spec"]["version"]["ref"]
             repository_version_sha = repository_version["spec"]["version"]["sha"]
@@ -441,13 +457,13 @@ class EndorCtl:
 
             # ScanResult: search for a completed scan
             filter_str = endor_filter.scan_result(
-                EndorContextType.MAIN, project_uuid, repository_version_ref, repository_version_sha
+                repository_version_context_type, project_uuid, repository_version_ref, repository_version_sha
             )
             scan_result = self.get_scan_result(filter_str, retry=False)
             project_uuid = scan_result["meta"]["parent_uuid"]
 
             # PackageVersions: get package versions for SBOM
-            if branch == "master":
+            if branch in ["master","main"]:
                 context_type = EndorContextType.MAIN
                 context_id = "default"
             else:
