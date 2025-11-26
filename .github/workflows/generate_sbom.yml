@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
     permissions:
       id-token: write # Required to request a json web token (JWT) for keyless authentication with Endor Labs
-      contents: read
+      contents: write # Required for PR
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
