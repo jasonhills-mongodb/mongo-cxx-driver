@@ -400,6 +400,7 @@ def main() -> None:
         default=None,
         type=str,
     )
+    endor.add_argument("--enable-github-action-token", help="Enable keyless authentication using Github action OIDC tokens", action="store_true")
     endor.add_argument(
         "--namespace", help="Endor Labs namespace (Default: mongodb.{git org})", type=str
     )
@@ -479,6 +480,7 @@ def main() -> None:
     # endor
     endorctl_path = args.endorctl_path
     config_path = args.config_path
+    enable_github_action_token = args.enable_github_action_token
     namespace = args.namespace if args.namespace else f"mongodb.{git_info.org}"
     target = args.target
 
@@ -529,7 +531,7 @@ def main() -> None:
     # region export Endor Labs SBOM
 
     print_banner(f"Exporting Endor Labs SBOM for {target} {getattr(git_info, target)}")
-    endorctl = EndorCtl(namespace, retry_limit, sleep_duration, endorctl_path, config_path)
+    endorctl = EndorCtl(namespace, retry_limit, sleep_duration, endorctl_path, config_path, enable_github_action_token=enable_github_action_token)
     if target == "commit":
         endor_bom = endorctl.get_sbom_for_commit(git_info.project, git_info.commit)
     elif target == "branch":

@@ -52,4 +52,4 @@ jobs:
     - name: Install dependencies
       run: uv sync --group make_release
     - name: generate_sbom.py
-      run: uv run etc/sbom/generate_sbom.py --target=branch --sbom-metadata=etc/sbom/metadata.cdx.json
+      run: uv run etc/sbom/generate_sbom.py --enable-github-action-token --target=branch --sbom-metadata=etc/sbom/metadata.cdx.json

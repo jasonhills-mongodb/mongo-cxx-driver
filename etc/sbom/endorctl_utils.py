@@ -145,12 +145,14 @@ class EndorCtl:
         sleep_duration=30,
         endorctl_path="endorctl",
         config_path=None,
+        enable_github_action_token=False
     ):
         self.namespace = namespace
         self.retry_limit = retry_limit
         self.sleep_duration = sleep_duration
         self.endorctl_path = endorctl_path
         self.config_path = config_path
+        self.enable_github_action_token = enable_github_action_token
 
     def _call_endorctl(self, command, subcommand, **kwargs):
         """https://docs.endorlabs.com/endorctl/"""
@@ -159,6 +161,8 @@ class EndorCtl:
             command = [self.endorctl_path, command, subcommand, f"--namespace={self.namespace}"]
             if self.config_path:
                 command.append(f"--config-path={self.config_path}")
+            if self.enable_github_action_token:
+                command.append(f"--enable-github-action-token")
 
             # parse args into flags
             for key, value in kwargs.items():
