@@ -59,8 +59,8 @@ jobs:
         activate-environment: true
         enable-cache: true
 
-    - name: Install dependencies
-      run: uv sync --group sbom
+    # - name: Install dependencies
+    #   run: uv sync --group sbom
 
     - name: generate_sbom.py
       run: uv run etc/sbom/generate_sbom.py --enable-github-action-token --target=branch --sbom-metadata=etc/sbom/metadata.cdx.json --save-warnings=${{runner.temp}}/warnings.txt
