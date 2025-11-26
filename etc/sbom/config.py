@@ -28,7 +28,7 @@ prefixes = [
 
 for component in endor_components_remove:
     for prefix in prefixes:
-        endor_components_remove.append(prefix + component)
+        component = prefix + component
 
 # ################ Component Renaming ################
 # Endor does not have syntactically valid PURLs for C/C++ packages.

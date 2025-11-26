@@ -1,10 +1,3 @@
-# /// script
-# dependencies = [
-#    "gitpython",
-#    "pygithub",
-#    "semver",
-# ]
-# ///
 #!/usr/bin/env python3
 """
 Generate a CycloneDX SBOM using scan results from Endor Labs.
