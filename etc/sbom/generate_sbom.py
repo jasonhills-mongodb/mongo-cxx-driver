@@ -832,7 +832,7 @@ def main() -> None:
     print_banner('CONSOLIDATED WARNINGS')
     warnings = ["The following warnings were output when generating the SBOM:\n"]
     
-    if len(record):
+    if len(warning_handler.warnings):
         for record in warning_handler.warnings:
             warnings.append(" - " + record.getMessage())
     else:
