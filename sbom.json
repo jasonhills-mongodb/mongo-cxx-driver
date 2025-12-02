@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "serialNumber": "urn:uuid:14f3bbeb-851e-43f7-8e5c-26e087cc0970",
-  "version": 1,
+  "version": 2,
   "metadata": {
-    "timestamp": "2025-11-26T20:24:04Z",
+    "timestamp": "2025-12-02T19:50:50Z",
     "lifecycles": [
       {
         "phase": "pre-build"
@@ -268,14 +268,6 @@
       "scope": "required"
     },
     {
-      "bom-ref": "pkg:github/jasonhills-mongodb/mongo-cxx-driver@sbom_github_action?package-id=0999c3478a09a2e2",
-      "name": "github.com/jasonhills-mongodb/mongo-cxx-driver",
-      "purl": "pkg:github/jasonhills-mongodb/mongo-cxx-driver@sbom_github_action",
-      "type": "library",
-      "version": "sbom_github_action",
-      "scope": "excluded"
-    },
-    {
       "bom-ref": "pkg:github/mongodb/mongo-cxx-driver@r4.1.1?package-id=c2042e84ed2ed5ca",
       "externalReferences": [
         {
@@ -294,48 +286,6 @@
       "purl": "pkg:github/mongodb/mongo-cxx-driver@r4.1.1",
       "type": "library",
       "version": "r4.1.1",
-      "scope": "excluded"
-    },
-    {
-      "bom-ref": "pkg:github/mozilla/cubeb@471c7e209cf152414c0498f0c4015f9ff9b2f1c0?package-id=dd972228bb636626",
-      "externalReferences": [
-        {
-          "type": "distribution",
-          "url": "https://github.com/mozilla/cubeb.git"
-        }
-      ],
-      "licenses": [
-        {
-          "license": {
-            "id": "ISC"
-          }
-        }
-      ],
-      "name": "github.com/mozilla/cubeb",
-      "purl": "pkg:github/mozilla/cubeb@471c7e209cf152414c0498f0c4015f9ff9b2f1c0",
-      "type": "library",
-      "version": "471c7e209cf152414c0498f0c4015f9ff9b2f1c0",
-      "scope": "excluded"
-    },
-    {
-      "bom-ref": "pkg:github/zlib-ng/zlib-ng@343c4c549107d31f6eeabfb4b31bec4502a2ea0e?package-id=8369b3e53cb7a837",
-      "externalReferences": [
-        {
-          "type": "distribution",
-          "url": "https://github.com/zlib-ng/zlib-ng.git"
-        }
-      ],
-      "licenses": [
-        {
-          "license": {
-            "id": "Zlib"
-          }
-        }
-      ],
-      "name": "github.com/zlib-ng/zlib-ng",
-      "purl": "pkg:github/zlib-ng/zlib-ng@343c4c549107d31f6eeabfb4b31bec4502a2ea0e",
-      "type": "library",
-      "version": "343c4c549107d31f6eeabfb4b31bec4502a2ea0e",
       "scope": "excluded"
     }
   ],
@@ -383,19 +333,7 @@
       "dependsOn": []
     },
     {
-      "ref": "pkg:github/jasonhills-mongodb/mongo-cxx-driver@sbom_github_action?package-id=0999c3478a09a2e2",
-      "dependsOn": []
-    },
-    {
       "ref": "pkg:github/mongodb/mongo-cxx-driver@r4.1.1?package-id=c2042e84ed2ed5ca",
-      "dependsOn": []
-    },
-    {
-      "ref": "pkg:github/mozilla/cubeb@471c7e209cf152414c0498f0c4015f9ff9b2f1c0?package-id=dd972228bb636626",
-      "dependsOn": []
-    },
-    {
-      "ref": "pkg:github/zlib-ng/zlib-ng@343c4c549107d31f6eeabfb4b31bec4502a2ea0e?package-id=8369b3e53cb7a837",
       "dependsOn": []
     }
   ]
