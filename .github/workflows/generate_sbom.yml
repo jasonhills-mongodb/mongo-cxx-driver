@@ -79,15 +79,16 @@ jobs:
       run: |
         # Strip out nondeterministic SBOM fields and save to temp file
         jq 'del(.version, .metadata.timestamp, .metadata.tools.services[].version)' sbom.json > ${{runner.temp}}/sbom.generated.cdx.json
+        # diff the temp SBOM files, save output to variable, supress exit code
         RESULT=$(diff --brief ${{runner.temp}}/sbom.existing.cdx.json ${{runner.temp}}/sbom.generated.cdx.json || true)
         # Set the output variable
-        echo "::set-output name=result::$RESULT" 
+        echo "result=$RESULT" >> $GITHUB_OUTPUT
 
     - name: Generate pull request content and notice, if SBOM has changed
       if: ${{ steps.sbom_diff.outputs.result }}
       run: |
         printf "SBOM updated after commit ${{ github.sha }}.\n\n" | cat - ${{runner.temp}}/warnings.txt > ${{runner.temp}}/pr_body.txt
-        echo "::notice SBOM has changed"
+        echo "::notice title=SBOM-Diff::SBOM has changed"
 
     - name: Open Pull Request, if SBOM has changed
       if: ${{ steps.sbom_diff.outputs.result }}
