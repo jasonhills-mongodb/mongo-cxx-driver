@@ -79,7 +79,7 @@ jobs:
       run: |
         # Strip out nondeterministic SBOM fields and save to temp file
         jq 'del(.version, .metadata.timestamp, .metadata.tools.services[].version)' sbom.json > ${{runner.temp}}/sbom.generated.cdx.json
-        RESULT=$(diff ${{runner.temp}}/sbom.existing.cdx.json ${{runner.temp}}/sbom.generated.cdx.json)
+        RESULT=$(diff --brief ${{runner.temp}}/sbom.existing.cdx.json ${{runner.temp}}/sbom.generated.cdx.json || true)
         # Set the output variable
         echo "::set-output name=result::$RESULT" 
 
