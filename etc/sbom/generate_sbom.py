@@ -830,9 +830,9 @@ def main() -> None:
 
     # Access the collected warnings
     print_banner('CONSOLIDATED WARNINGS')
-    warnings = []
+    warnings = ["The following warnings were output when generating the SBOM:\n"]
     for record in warning_handler.warnings:
-        warnings.append(record.getMessage())
+        warnings.append(" - " + record.getMessage())
 
     print('\n'.join(warnings))
 
@@ -840,7 +840,7 @@ def main() -> None:
         write_list_to_text_file(warnings, save_warnings)
 
     print_banner('COMPLETED')
-    if not os.getenv('CI'):
+    if not os.getenv('CI') and not os.getenv("GITHUB_ACTIONS"):
         print('Be sure to add the SBOM to your next commit if the file content has changed.')
 
     # endregion Finalize SBOM
