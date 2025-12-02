@@ -63,17 +63,19 @@ jobs:
         enable-cache: true
 
     - name: Install dependencies
-      run: |
-        uv sync --group generate_sbom
+      run: uv sync --group generate_sbom
 
     - name: generate_sbom.py
       run: uv run etc/sbom/generate_sbom.py --enable-github-action-token --target=branch --sbom-metadata=etc/sbom/metadata.cdx.json --save-warnings=${{runner.temp}}/warnings.txt
+
+    - name: Generate Pull Request Content
+      run: printf "SBOM updated after commit ${{ github.sha }}.\n\nThe following warnings were output when generating the SBOM:\n" | cat - ${{runner.temp}}/warnings.txt > ${{runner.temp}}/pr_body.txt
 
     - name: Open Pull Request
       uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412 # v7.0.9
       with:
         add-paths: sbom.json
-        body-path: ${{runner.temp}}/warnings.txt
+        body-path: ${{runner.temp}}/pr_body.txt
         branch: cxx-sbom-update
         commit-message: Update SBOM file(s)
         delete-branch: true
