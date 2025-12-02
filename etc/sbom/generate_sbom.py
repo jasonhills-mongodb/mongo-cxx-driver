@@ -768,7 +768,7 @@ def main() -> None:
             endor_components[component]['scope'] = 'excluded'
             meta_bom['components'].append(endor_components[component])
             meta_bom['dependencies'].append({'ref': endor_components[component]['bom-ref'], 'dependsOn': []})
-            logger.info(f'SBOM AS-IS COMPONENT: Added {component}')
+            logger.warning(f'SBOM AS-IS COMPONENT: Added {component}')
 
     # endregion Parse unmatched Endor Labs components
 
