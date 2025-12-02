@@ -1,12 +1,14 @@
 name: Generate SBOM
 
 on:
-  workflow_dispatch:
   push:
-    # branches:
-    #   - 'master'
-    #   - 'releases/**'
-    #   - 'CXX**'
+    branches:
+      - 'master'
+      - 'releases/v**'
+      - 'debian/*'
+    paths:
+      - '**/CMakeLists.txt'
+      - '**/*.cmake'
 
 jobs:
   generate_sbom:
