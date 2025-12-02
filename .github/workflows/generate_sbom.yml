@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - 'master'
-      - 'releases/v**'
+      - 'releases/v*'
       - 'debian/*'
     paths:
       - '**/CMakeLists.txt'
@@ -23,6 +23,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v6
       with:
+        fetch-tags: true
         submodules: recursive
 
     - name: Configure CMake and fetch dependency sources
@@ -33,7 +34,7 @@ jobs:
       working-directory: ${{env.BUILD}}
       run: cmake .. -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_STANDARD=${{env.CXX_STANDARD}} -DENABLE_TESTS=ON
 
-    - name: Install endorctl and Scan with Endor Labs
+    - name: Endor Labs - Monitoring Scan
       uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # v1.1.8
       with:
         additional_args: "--languages=c --exclude-path=\"build/CMakeFiles/**\""
@@ -42,6 +43,7 @@ jobs:
         namespace: mongodb.${{github.repository_owner}}
         pr: false
         scan_dependencies: true
+        scan_summary_output_type: "table"
         tags: github_action
       env:
         ENDOR_SCAN_EMBEDDINGS: true
