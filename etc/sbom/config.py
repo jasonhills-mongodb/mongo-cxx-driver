@@ -3,8 +3,9 @@
 
 import logging
 import re
-import semver
 import subprocess
+
+import semver
 
 logger = logging.getLogger('generate_sbom')
 logger.setLevel(logging.NOTSET)
@@ -26,7 +27,7 @@ prefixes = [
     'pkg:github/',
 ]
 
-endor_components_remove=[]
+endor_components_remove = []
 for component in components_remove:
     for prefix in prefixes:
         endor_components_remove.append(prefix + component)
@@ -49,20 +50,22 @@ endor_components_rename = [
 # ################ Primary Component Version ################
 def get_primary_component_version() -> str:
     """Attempt to determine primary component version using repo script."""
-    
+
     # mongo-cxx-driver: etc/calc_release_version.py
     try:
-        result = subprocess.run(["python", "etc/calc_release_version.py"], capture_output=True, text=True)
+        result = subprocess.run(['python', 'etc/calc_release_version.py'], capture_output=True, text=True)
         version = semver.VersionInfo.parse(result.stdout)
-        if version.match("0.0.0"):
+        if version.match('0.0.0'):
             return None
         else:
             return version
     except Exception as e:
-        logger.warning("PRIMARY COMPONENT VERSION: Unable to parse output from etc/calc_release_version.py: %s", result.stdout)
+        logger.warning(
+            'PRIMARY COMPONENT VERSION: Unable to parse output from etc/calc_release_version.py: %s', result.stdout
+        )
         logger.warning(e)
         return None
-        
+
 
 # ################ Version Transformation ################
 
@@ -75,8 +78,8 @@ RE_SEMVER = rf'{RE_VER_NUM}\.{RE_VER_NUM}\.{RE_VER_NUM}{RE_VER_LBL}'
 regex_semver = re.compile(RE_SEMVER)
 
 # Release Naming Conventions
-REGEX_RELEASE_BRANCH = rf'^releases/v{RE_SEMVER}$' # e.g., releases/v4.1
-REGEX_RELEASE_TAG = rf'^(r{RE_SEMVER})|(debian/{RE_SEMVER}-1)$' # e.g., r3.7.0-beta1, debian/4.1.4-1
+REGEX_RELEASE_BRANCH = rf'^releases/v{RE_SEMVER}$'  # e.g., releases/v4.1
+REGEX_RELEASE_TAG = rf'^(r{RE_SEMVER})|(debian/{RE_SEMVER}-1)$'  # e.g., r3.7.0-beta1, debian/4.1.4-1
 
 VERSION_PATTERN_REPL = [
     # 'debian/1.28.1-1' pkg:github/mongodb/mongo-c-driver (temporary workaround)

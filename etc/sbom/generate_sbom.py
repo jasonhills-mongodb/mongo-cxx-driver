@@ -543,8 +543,8 @@ def main() -> None:
     ## remove uneeded components ##
     # [list]endor_components_remove is defined in config.py
     # Endor Labs includes the main component in 'components'. This is not standard, so we remove it.
-    config.endor_components_remove.append(f"{git_info.org}/{git_info.repo}")
-    
+    config.endor_components_remove.append(f'pkg:github/{git_info.org}/{git_info.repo}')
+
     # Reverse iterate the SBOM components list to safely modify in situ
     for i in range(len(endor_bom['components']) - 1, -1, -1):
         component = endor_bom['components'][i]
@@ -631,7 +631,7 @@ def main() -> None:
 
     # Attempt to determine the primary component version being scanned
     primary_component_version = config.get_primary_component_version()
-    
+
     logger.debug(
         f'Available main component version options, repo script: {primary_component_version}, tag: {git_info.release_tag}, branch: {git_info.branch}, previous SBOM: {prev_bom["metadata"]["component"]["version"]}'
     )
@@ -639,10 +639,12 @@ def main() -> None:
 
     if primary_component_version:
         version = primary_component_version
-        purl_version = "r" + primary_component_version
+        purl_version = 'r' + primary_component_version
         cpe_version = primary_component_version
-        logger.info(f"PRIMARY COMPONENT VERSION: Using repo script output '{primary_component_version}' as primary component version")
-        
+        logger.info(
+            f"PRIMARY COMPONENT VERSION: Using repo script output '{primary_component_version}' as primary component version"
+        )
+
     # Project scan always set to 'master' or if using 'master' branch
     if target == 'project' or git_info.branch == 'master':
         version = 'master'
@@ -655,14 +657,16 @@ def main() -> None:
         version = git_info.release_tag[1:]  # remove leading 'r'
         purl_version = git_info.release_tag
         cpe_version = version  # without leading 'r'
-        logger.info(f"PRIMARY COMPONENT VERSION: Using release_tag '{git_info.release_tag}' as primary component version")
+        logger.info(
+            f"PRIMARY COMPONENT VERSION: Using release_tag '{git_info.release_tag}' as primary component version"
+        )
 
     # Release branch e.g., v7.0 or v8.2
     elif target == 'branch' and re.fullmatch(config.REGEX_RELEASE_BRANCH, git_info.branch):
         version = git_info.branch
         purl_version = git_info.branch
         # remove leading 'v', add wildcard. e.g. 8.2.*
-        cpe_version = version.replace("releases/","")[1:] + '.*'
+        cpe_version = version.replace('releases/', '')[1:] + '.*'
         logger.info(f"PRIMARY COMPONENT VERSION: Using release branch '{git_info.branch}' as primary component version")
 
     # Previous SBOM app version, if all needed specifiers exist
@@ -756,8 +760,8 @@ def main() -> None:
 
     print_banner('New Endor Labs components')
     if endor_components:
-        logger.info(
-            f'ENDOR SBOM: There are {len(endor_components)} unmatched components in the Endor Labs SBOM. Adding as-is. The applicable metadata should be added to the metadata SBOM for the next run.'
+        logger.warning(
+            f'ENDOR SBOM: There are {len(endor_components)} unmatched components in the Endor Labs SBOM. Adding as-is. The applicable metadata should be added to the metadata SBOM ({sbom_metadata_path}) for the next run.'
         )
         for component in endor_components:
             # set scope to excluded by default until the component is evaluated
@@ -830,13 +834,13 @@ def main() -> None:
 
     # Access the collected warnings
     print_banner('CONSOLIDATED WARNINGS')
-    warnings = ["The following warnings were output when generating the SBOM:\n"]
-    
+    warnings = ['The following warnings were output when generating the SBOM:\n']
+
     if len(warning_handler.warnings):
         for record in warning_handler.warnings:
-            warnings.append(" - " + record.getMessage())
+            warnings.append(' - ' + record.getMessage())
     else:
-        warnings.append(" - None")
+        warnings.append(' - None')
 
     print('\n'.join(warnings))
 
@@ -844,7 +848,7 @@ def main() -> None:
         write_list_to_text_file(warnings, save_warnings)
 
     print_banner('COMPLETED')
-    if not os.getenv('CI') and not os.getenv("GITHUB_ACTIONS"):
+    if not os.getenv('CI') and not os.getenv('GITHUB_ACTIONS'):
         print('Be sure to add the SBOM to your next commit if the file content has changed.')
 
     # endregion Finalize SBOM
