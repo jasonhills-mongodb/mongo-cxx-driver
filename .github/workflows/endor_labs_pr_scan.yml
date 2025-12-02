@@ -11,7 +11,7 @@ on:
       - '**/*.cmake'
 
 jobs:
-  configure_and_scan:
+  endor_pr_scan:
     permissions:
       id-token: write # Required to request a json web token (JWT) for keyless authentication with Endor Labs
       pull-requests: write # Required for endorctl to write pr comments
