@@ -34,7 +34,7 @@ jobs:
     - name: Endor Labs - Pull Request Scan
       uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # v1.1.8
       with:
-        additional_args: "--languages=c --exclude-path=\"build/CMakeFiles/**\""
+        additional_args: "--languages=c --include-path=\"build/_deps/**\""
         enable_pr_comments: true
         github_token: ${{ secrets.GITHUB_TOKEN }} # Required for endorctl to write pr comments
         log_level: info
