@@ -36,7 +36,7 @@ jobs:
     - name: Endor Labs - Pull Request Scan
       uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # v1.1.8
       with:
-        additional_args: "--languages=c"
+        additional_args: "--languages=c --include-path=\"build/_deps/**\""
         enable_pr_comments: true
         github_token: ${{ secrets.GITHUB_TOKEN }} # Required for endorctl to write pr comments
         log_level: info
@@ -44,7 +44,6 @@ jobs:
         namespace: mongodb.${{github.repository_owner}}
         pr: true
         scan_dependencies: true
-        scan_path: build/_deps
         scan_summary_output_type: "table"
         tags: github_action
       env:
