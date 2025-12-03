@@ -48,4 +48,6 @@ jobs:
         ENDOR_SCAN_EMBEDDINGS: true
 
     - name: Display config.yml
-      run: cat $HOME/.endorctl/config.yaml
+      run: |
+        which endorctl
+        #cat $HOME/.endorctl/config.yaml
