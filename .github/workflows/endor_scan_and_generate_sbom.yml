@@ -110,7 +110,7 @@ jobs:
         id: sbom_diff
         run: |
           # diff the temp SBOM files, save output to variable, supress exit code
-          RESULT=$(diff --brief ${{runner.temp}}/sbom.existing.cdx.json ${{runner.temp}}/sbom.generated.cdx.json)
+          RESULT=$(diff --brief ${{runner.temp}}/sbom.existing.cdx.json ${{runner.temp}}/sbom.generated.cdx.json || true)
           # Set the output variable
           echo "result=$RESULT" | tee -a $GITHUB_OUTPUT
 
