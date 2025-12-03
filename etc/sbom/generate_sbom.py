@@ -632,7 +632,7 @@ def main() -> None:
     # Attempt to determine the primary component version being scanned
     primary_component_version = config.get_primary_component_version()
 
-    logger.debug(
+    logger.info(
         f'Available main component version options, repo script: {primary_component_version}, tag: {git_info.release_tag}, branch: {git_info.branch}, previous SBOM: {prev_bom["metadata"]["component"]["version"]}'
     )
     meta_bom_ref = meta_bom['metadata']['component']['bom-ref']
