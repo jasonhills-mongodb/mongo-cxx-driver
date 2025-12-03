@@ -31,8 +31,7 @@ jobs:
       working-directory: ${{env.BUILD}}
       run: |
         cmake .. -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_STANDARD=${{env.CXX_STANDARD}} -DENABLE_TESTS=ON
-        git add _deps
-        git commit -m "Add build/_deps"
+        git rm .gitignore # prevent exclusion of build/_deps from endorctl scan
 
     - name: Endor Labs - Pull Request Scan
       uses: endorlabs/github-action@519df81de5f68536c84ae05ebb2986d0bb1d19fc # v1.1.8

@@ -210,7 +210,7 @@
       "scope": "required"
     },
     {
-      "bom-ref": "pkg:github/catchorg/clara@{{VERSION}}",
+      "bom-ref": "pkg:github/philsquared/clara@{{VERSION}}",
       "type": "library",
       "author": "Phil Nash",
       "group": "catchorg",
@@ -225,10 +225,10 @@
         }
       ],
       "copyright": "Copyright 2017 Two Blue Cubes Ltd. All rights reserved.",
-      "purl": "pkg:github/catchorg/clara@{{VERSION}}",
+      "purl": "pkg:github/philsquared/clara@{{VERSION}}",
       "externalReferences": [
         {
-          "url": "https://github.com/catchorg/clara.git",
+          "url": "https://github.com/philsquared/clara.git",
           "type": "distribution"
         }
       ],
@@ -271,7 +271,7 @@
     {
       "ref": "pkg:github/catchorg/catch2@{{VERSION}}",
       "dependsOn": [
-        "pkg:github/catchorg/clara@{{VERSION}}"
+        "pkg:github/philsquared/clara@{{VERSION}}"
       ]
     },
     {
@@ -284,7 +284,7 @@
       ]
     },
     {
-      "ref": "pkg:github/catchorg/clara@{{VERSION}}",
+      "ref": "pkg:github/philsquared/clara@{{VERSION}}",
       "dependsOn": []
     },
     {
