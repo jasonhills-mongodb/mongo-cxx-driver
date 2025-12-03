@@ -66,7 +66,7 @@ jobs:
       #   with:
       #     python-version: "3.10"
 
-      - name: Install uv
+      - name: Install uv (push only)
         if: env.PR_SCAN == false
         uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
         with:
@@ -74,7 +74,7 @@ jobs:
           activate-environment: true
           enable-cache: true
 
-      - name: Stash existing SBOM, generate new SBOM
+      - name: Stash existing SBOM, generate new SBOM (push only)
         if: env.PR_SCAN == false
         run: |
           # Existing SBOM: Strip out nondeterministic SBOM fields and save to temp file
@@ -84,7 +84,7 @@ jobs:
           # Generated SBOM: Strip out nondeterministic SBOM fields and save to temp file
           jq 'del(.version, .metadata.timestamp, .metadata.tools.services[].version)' sbom.json > ${{runner.temp}}/sbom.generated.cdx.json
 
-      - name: Check for SBOM changes
+      - name: Check for SBOM changes (push only)
         if: env.PR_SCAN == false
         id: sbom_diff
         run: |
@@ -93,13 +93,13 @@ jobs:
           # Set the output variable
           echo "result=$RESULT" | tee -a $GITHUB_OUTPUT
 
-      - name: Generate pull request content and notice message, if SBOM has changed
+      - name: Generate pull request content and notice message, if SBOM has changed (push only)
         if: env.PR_SCAN == false && steps.sbom_diff.outputs.result
         run: |
           printf "SBOM updated after commit ${{ github.sha }}.\n\n" | cat - ${{runner.temp}}/warnings.txt > ${{runner.temp}}/pr_body.txt
           echo "::notice title=SBOM-Diff::SBOM has changed"
 
-      - name: Open Pull Request, if SBOM has changed
+      - name: Open Pull Request, if SBOM has changed (push only)
         if: env.PR_SCAN == false && steps.sbom_diff.outputs.result
         uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412 # v7.0.9
         env:
