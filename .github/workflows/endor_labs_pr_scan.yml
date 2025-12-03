@@ -50,4 +50,4 @@ jobs:
     - name: Display config.yml
       run: |
         which endorctl
-        #cat $HOME/.endorctl/config.yaml
+        cat .endorctl/config.yaml
