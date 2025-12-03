@@ -89,6 +89,8 @@ jobs:
       - name: Stash existing SBOM, generate new SBOM (push only)
         if: env.PR_SCAN == 'false'
         run: |
+          # If sbom.json does not exist, create an empty file to avoid jq errors
+          echo >> sbom.json
           # Existing SBOM: Strip out nondeterministic SBOM fields and save to temp file
           jq 'del(.version, .metadata.timestamp, .metadata.tools.services[].version)' sbom.json > ${{runner.temp}}/sbom.existing.cdx.json
           # etc/sbom/generate_sbom.py
