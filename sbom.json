@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:706de295-1562-41ac-9842-4c3938eb5b1c",
+  "serialNumber": "urn:uuid:e6b59a92-932a-49bc-91dd-91ce2d283dee",
   "version": 1,
   "metadata": {
-    "timestamp": "2025-12-03T20:58:07Z",
+    "timestamp": "2025-12-03T23:08:22Z",
     "lifecycles": [
       {
         "phase": "pre-build"
@@ -13,7 +13,7 @@
     ],
     "component": {
       "type": "application",
-      "bom-ref": "pkg:github/mongodb/mongo-cxx-driver@master",
+      "bom-ref": "pkg:github/mongodb/mongo-cxx-driver@releases/v4.1",
       "supplier": {
         "name": "MongoDB, Inc.",
         "url": [
@@ -25,9 +25,9 @@
       "group": "mongodb",
       "name": "mongo-cxx-driver",
       "description": "C++ Driver for MongoDB",
-      "version": "master",
-      "cpe": "cpe:2.3:a:mongodb:c++:master:*:*:*:*:*:*:*",
-      "purl": "pkg:github/mongodb/mongo-cxx-driver@master",
+      "version": "releases/v4.1",
+      "cpe": "cpe:2.3:a:mongodb:c++:releases/v4.1:*:*:*:*:*:*:*",
+      "purl": "pkg:github/mongodb/mongo-cxx-driver@releases/v4.1",
       "externalReferences": [
         {
           "type": "license",
@@ -270,7 +270,7 @@
   ],
   "dependencies": [
     {
-      "ref": "pkg:github/mongodb/mongo-cxx-driver@master",
+      "ref": "pkg:github/mongodb/mongo-cxx-driver@releases/v4.1",
       "dependsOn": [
         "pkg:github/catchorg/catch2@v3.8.1",
         "pkg:github/mongodb/mongo-c-driver@2.1.2"
