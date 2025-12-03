@@ -47,7 +47,7 @@ endor_components_rename = [
 
 
 # ################ Primary Component Version ################
-def get_primary_component_version() -> str:
+def run_repo_version_script() -> str:
     """Attempt to determine primary component version using repo script."""
 
     # mongo-cxx-driver: etc/calc_release_version.py
@@ -77,7 +77,7 @@ RE_SEMVER = rf'{RE_VER_NUM}\.{RE_VER_NUM}\.{RE_VER_NUM}{RE_VER_LBL}'
 regex_semver = re.compile(RE_SEMVER)
 
 # Release Naming Conventions
-REGEX_RELEASE_BRANCH = rf'^releases/v{RE_SEMVER}$'  # e.g., releases/v4.1
+REGEX_RELEASE_BRANCH = rf'^releases/v(.*)$'  # e.g., releases/v4.1
 REGEX_RELEASE_TAG = rf'^(r{RE_SEMVER})|(debian/{RE_SEMVER}-1)$'  # e.g., r3.7.0-beta1, debian/4.1.4-1
 
 VERSION_PATTERN_REPL = [

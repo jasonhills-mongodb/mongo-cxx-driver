@@ -630,23 +630,23 @@ def main() -> None:
     # region primary component
 
     # Attempt to determine the primary component version being scanned
-    primary_component_version = config.get_primary_component_version()
+    repo_script_version = config.run_repo_version_script()
 
     logger.info(
-        f'Available main component version options, repo script: {primary_component_version}, tag: {git_info.release_tag}, branch: {git_info.branch}, previous SBOM: {prev_bom["metadata"]["component"]["version"]}'
+        f'Available main component version options, repo script: {repo_script_version}, tag: {git_info.release_tag}, branch: {git_info.branch}, previous SBOM: {prev_bom["metadata"]["component"]["version"]}'
     )
     meta_bom_ref = meta_bom['metadata']['component']['bom-ref']
 
-    if primary_component_version:
-        version = primary_component_version
-        purl_version = 'r' + primary_component_version
-        cpe_version = primary_component_version
+    if repo_script_version:
+        version = repo_script_version
+        purl_version = 'r' + repo_script_version
+        cpe_version = repo_script_version
         logger.info(
-            f"PRIMARY COMPONENT VERSION: Using repo script output '{primary_component_version}' as primary component version"
+            f"PRIMARY COMPONENT VERSION: Using repo script output '{repo_script_version}' as primary component version"
         )
 
     # Project scan always set to 'master' or if using 'master' branch
-    if target == 'project' or git_info.branch == 'master':
+    elif target == 'project' or git_info.branch == 'master':
         version = 'master'
         purl_version = 'master'
         cpe_version = 'master'
@@ -662,12 +662,12 @@ def main() -> None:
         )
 
     # Release branch e.g., v7.0 or v8.2
-    elif target == 'branch' and re.fullmatch(config.REGEX_RELEASE_BRANCH, git_info.branch):
-        version = git_info.branch
-        purl_version = git_info.branch
+    elif target == 'branch' and re.fullmatch(config.REGEX_RELEASE_BRANCH, git_info.branch).group(0):
+        version = re.search(config.REGEX_RELEASE_BRANCH, git_info.branch).group(0)
+        purl_version = version
         # remove leading 'v', add wildcard. e.g. 8.2.*
-        cpe_version = version.replace('releases/', '')[1:] + '.*'
-        logger.info(f"PRIMARY COMPONENT VERSION: Using release branch '{git_info.branch}' as primary component version")
+        cpe_version = version
+        logger.info(f"PRIMARY COMPONENT VERSION: Using release branch '{git_info.branch}' to derive '{version}' as primary component version")
 
     # Previous SBOM app version, if all needed specifiers exist
     elif (
