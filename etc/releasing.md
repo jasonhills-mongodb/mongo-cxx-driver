@@ -116,7 +116,7 @@ All issues with an Impact level of "Medium" or greater which do not have a "Mong
 
 Ensure the container engine (e.g. `podman` or `docker`) is authenticated with the DevProd-provided Amazon ECR instance.
 
-Ensure that any `CXX Update SBOM action - $BRANCH_NAME` PRs are merged for the release branch.
+Ensure that any `CXX Update SBOM action - $BRANCH_NAME` PRs are merged for the release branch and the `metadata.component` `.version` `.cpe` and `.purl` are correct.
 
 Run a patch build which executes the `sbom` task and download the "Augmented SBOM (Updated)" file as `etc/augmented.sbom.json`. Evergreen CLI may be used to schedule only the `sbom` task:
 
