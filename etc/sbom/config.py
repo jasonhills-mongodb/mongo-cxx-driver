@@ -40,7 +40,6 @@ for component in components_remove:
 # Run string replacements to correct for this:
 endor_components_rename = [
     ['pkg:generic/zlib.net/zlib', 'pkg:github/madler/zlib'],
-    ['pkg:github/philsquared/clara', 'pkg:github/catchorg/clara'],
     # in case of regression
     ['pkg:generic/github.com/', 'pkg:github/'],
     ['pkg:c/github.com/', 'pkg:github/'],

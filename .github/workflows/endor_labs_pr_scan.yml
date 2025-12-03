@@ -31,7 +31,7 @@ jobs:
       working-directory: ${{env.BUILD}}
       run: |
         cmake .. -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_STANDARD=${{env.CXX_STANDARD}} -DENABLE_TESTS=ON
-        git add build/_deps
+        git add _deps
         git commit -m "Add build/_deps"
 
     - name: Endor Labs - Pull Request Scan
