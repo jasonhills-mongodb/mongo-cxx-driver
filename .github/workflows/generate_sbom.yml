@@ -19,6 +19,8 @@ jobs:
       contents: write # Required for commit
       pull-requests: write # Required for PR
     runs-on: ubuntu-latest
+    env:
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v6
@@ -94,7 +96,7 @@ jobs:
       with:
         add-paths: sbom.json
         body-path: ${{runner.temp}}/pr_body.txt
-        branch: cxx-sbom-update
+        branch: cxx-sbom-update-${{ env.BRANCH_NAME }}
         commit-message: Update SBOM file(s)
         delete-branch: true
-        title: CXX Update SBOM action
+        title: CXX Update SBOM action - ${{ env.BRANCH_NAME }}
