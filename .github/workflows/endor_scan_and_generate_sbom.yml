@@ -11,6 +11,7 @@ name: Endor Labs Scan and Generate SBOM
 
 on:
   workflow_dispatch: {}
+  create:
   pull_request:
     branches:
       - "master"
