@@ -11,21 +11,21 @@ name: Endor Labs Scan and Generate SBOM
 on:
   workflow_dispatch: {}
   pull_request:
-    branches:
-      - "master"
-      - "releases/v*"
-      - "debian/*"
-    paths:
-      - "**/CMakeLists.txt"
-      - "**/*.cmake"
-  push:
-    branches:
-      - "master"
-      - "releases/v*"
-      - "debian/*"
-    paths:
-      - "**/CMakeLists.txt"
-      - "**/*.cmake"
+  #   branches:
+  #     - "master"
+  #     - "releases/v*"
+  #     - "debian/*"
+  #   paths:
+  #     - "**/CMakeLists.txt"
+  #     - "**/*.cmake"
+  # push:
+  #   branches:
+  #     - "master"
+  #     - "releases/v*"
+  #     - "debian/*"
+  #   paths:
+  #     - "**/CMakeLists.txt"
+  #     - "**/*.cmake"
 
 permissions:
   id-token: write # Required to request a json web token (JWT) for keyless authentication with Endor Labs
@@ -50,6 +50,11 @@ jobs:
         with:
           fetch-tags: true
           submodules: recursive
+
+      - name: Update apt-get
+        run: sudo apt-get update
+      - name: Install packages
+        run: sudo apt-get install -y snappy-dev
 
       - name: Configure CMake and fetch dependency sources
         env:
