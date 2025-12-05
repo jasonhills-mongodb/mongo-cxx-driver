@@ -54,7 +54,7 @@ jobs:
       - name: Update apt-get
         run: sudo apt-get update
       - name: Install packages
-        run: sudo apt-get install -y snappy-dev
+        run: sudo apt-get install -y libsnappy-dev
 
       - name: Configure CMake and fetch dependency sources
         env:
