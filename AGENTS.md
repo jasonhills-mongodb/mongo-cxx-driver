@@ -158,3 +158,14 @@ See `etc/coding_guidelines.md` for detailed rules on:
 - Include ordering (IWYU)
 - Exception specification (`noexcept` policy)
 - Parameter passing and declaration order
+
+## Cursor Cloud specific instructions
+
+This repo is a C++ library (not a long-running service). "Running the app" means building and running the example binaries and/or the test suites. See the Build System and Running Tests sections above for the canonical commands; the notes below only cover non-obvious caveats.
+
+- Toolchain is already installed in the snapshot: `cmake`, `ninja`, `gcc`/`g++`, `clang` (default `c++`/`cc` are Clang 18), plus `libssl-dev`/`libsasl2-dev`/`libzstd-dev` (needed so the auto-fetched MongoDB C Driver builds with TLS/SASL and satisfies its `MONGODB-AWS` crypto requirement). `uv` is installed for Python tooling and is on `PATH` in login shells.
+- Configure/build with the Ninja generator (`cmake -G Ninja ...`) as in Running Tests. The MongoDB C Driver and Catch2 are downloaded via CMake `FetchContent` during the configure step, so the first configure needs network access; subsequent configures reuse `build/_deps`.
+- A local `mongod` (8.0) is available. Start it before running `mongocxx` integration tests/examples, and it MUST be started with `--setParameter enableTestCommands=1` — otherwise a few `test_driver` cases fail with `no such command: 'configureFailPoint'` (fail-point/fail-command tests). Example: `mongod --dbpath /var/lib/mongodb --bind_ip 127.0.0.1 --port 27017 --logpath /var/log/mongodb/mongod.log --setParameter enableTestCommands=1 --fork`. Tests/examples connect to the hardcoded `mongodb://localhost:27017`.
+- Prefer running the suites via `ctest` from the `build/` directory (not by invoking the `test_*` binaries directly): `ctest` sets the `*_TESTS_PATH` env vars for the spec-test runners automatically. Running the raw binaries without those vars will skip or fail spec tests.
+- Client-Side Field Level Encryption (CSFLE) tests/examples are expected to skip here: the fetched `libmongoc` is built without client-side encryption (no `libmongocrypt`/`mongocryptd` installed). This is not a failure.
+- Linting: the dev-facing check is `uv run --frozen etc/format.py --mode check` (auto-fetches a pinned `clang-format`). `etc/run-clang-tidy.sh` is CI-only — it hard-guards to RHEL distros and downloads a pinned LLVM `run-clang-tidy.py`, so it will not run as-is on this Ubuntu environment.
